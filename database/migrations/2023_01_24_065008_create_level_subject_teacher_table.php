@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\LevelSubject;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->text('description')->nullable();
+        Schema::create('level_subject_teacher', function (Blueprint $table) {
+            $table->id();
+            $table->foreignUuid('school_id')->constrained();
+            $table->foreignId('level_subject_id');
+            $table->foreignUuid('teacher_id')->constrained();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('level_subject_teacher');
     }
 };

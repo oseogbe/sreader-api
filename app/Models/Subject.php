@@ -12,18 +12,8 @@ class Subject extends Model
 
     protected $guarded = [];
 
-    public function school()
+    public function levels()
     {
-        return $this->belongsTo(School::class);
-    }
-
-    public function level()
-    {
-        return $this->belongsTo(Level::class);
-    }
-
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsToMany(Level::class);
     }
 }

@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->text('description')->nullable();
+        Schema::create('test_m_c_q_s', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('test_id')->constrained();
+            $table->tinyText('question');
+            $table->jsonb('options');
+            $table->enum('correct_option', [1, 2, 3, 4, 5]);
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('test_m_c_q_s');
     }
 };

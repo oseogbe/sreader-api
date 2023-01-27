@@ -17,7 +17,7 @@ class SchoolFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->words(2, true) . ' ' . fake()->randomElement(['school', 'academy']),
+            'name' => fake()->words(1, true) . ' ' . fake()->randomElement(['seconday school', 'college']),
             'logo' => fake()->regexify('[A-Za-z0-9]{30}') . fake()->randomElement(['.jpg', '.png']),
             'location' => fake()->sentence
         ];

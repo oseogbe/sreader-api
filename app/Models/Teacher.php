@@ -18,4 +18,9 @@ class Teacher extends Authenticatable
     {
         return $this->belongsTo(School::class);
     }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(LevelSubject::class)->with('level', 'subject');
+    }
 }

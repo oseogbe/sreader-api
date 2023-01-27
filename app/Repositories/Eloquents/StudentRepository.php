@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquents;
 
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Carbon\Carbon;

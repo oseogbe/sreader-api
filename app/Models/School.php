@@ -27,8 +27,8 @@ class School extends Model
         return $this->hasMany(Student::class);
     }
 
-    public function subjectsForLevel($level_id)
-    {
-        return $this->hasMany(Subject::class)->where('level_id', $level_id);
-    }
+    // public function subjectsForLevel($level_id)
+    // {
+    //     return $this->hasMany(Subject::class)->where('level_id', $level_id);
+    // }
 }

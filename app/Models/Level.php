@@ -16,8 +16,8 @@ class Level extends Model
         return $this->hasMany(Book::class);
     }
 
-    public function subjects($school_id)
+    public function subjects()
     {
-        return $this->hasMany(Subject::class)->where('school_id', $school_id);
+        return $this->belongsToMany(Subject::class)->select('name', 'description');
     }
 }

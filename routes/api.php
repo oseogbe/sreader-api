@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Resources\StudentResource;
+use App\Models\Level;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +18,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/classes', function(Request $request) {
-    return Level::all()->toArray();
+    return Level::select('id', 'name')->with('subjects')->get()->toArray();
 });

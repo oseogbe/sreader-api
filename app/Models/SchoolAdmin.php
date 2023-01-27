@@ -13,4 +13,9 @@ class SchoolAdmin extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasUuids;
 
     protected $guarded = [];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }
