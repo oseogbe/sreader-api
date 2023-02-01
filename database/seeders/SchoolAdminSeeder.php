@@ -16,6 +16,8 @@ class SchoolAdminSeeder extends Seeder
      */
     public function run()
     {
+        SchoolAdmin::truncate();
+
         $a = 0;
 
         while ($a <= 5) {

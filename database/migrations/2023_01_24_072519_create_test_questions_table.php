@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('weeks', function (Blueprint $table) {
+        Schema::create('test_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('school_id')->constrained();
-            $table->enum('term', [1, 2, 3]);
-            $table->dateTime('starts_at')->nullable();
-            $table->year('year');
+            $table->foreignId('test_id')->constrained();
+            $table->tinyText('question');
+            $table->string('image')->nullable();
+            $table->jsonb('options');
+            $table->enum('correct_option', [0, 1, 2, 3, 4]);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weeks');
+        Schema::dropIfExists('test_m_c_q_s');
     }
 };

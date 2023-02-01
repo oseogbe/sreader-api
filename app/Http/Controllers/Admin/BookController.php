@@ -29,9 +29,13 @@ class BookController extends Controller
 
     public function getBooksByClass(Request $request)
     {
+        $request->validate([
+            'level_id' => 'required|integer'
+        ]);
+
         return response([
             'success' => true,
-            'data' => $this->bookRepository->getBooksByClass($request->class)]
+            'data' => $this->bookRepository->getBooksByClass($request->level_id)]
         );
     }
 
@@ -77,7 +81,7 @@ class BookController extends Controller
             'file_size' => $book_size,
         ]);
 
-        $book_data = $request->only('title', 'level_id', 'cover_path', 'cover_size', 'file_path', 'file_size');
+        $book_data = $request->only('title', 'level_id', 'subject_id', 'cover_path', 'cover_size', 'file_path', 'file_size');
 
         return response([
             'success' => true,

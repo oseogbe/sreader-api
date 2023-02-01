@@ -16,6 +16,16 @@ class StudentParent extends Authenticatable
 
     protected $table = 'parents';
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     public function children()
     {
         return $this->hasMany(Student::class);

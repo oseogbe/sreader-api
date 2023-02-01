@@ -15,8 +15,11 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('school_id')->constrained();
-            $table->foreignId('level_subject_teacher_id');
+            $table->uuidMorphs('testable');     // App\Models\Book or App\Models\Resource
+            $table->foreignUuid('teacher_id')->nullable();      // null if test is created by app admin
+            $table->enum('term', [1, 2, 3]);
+            $table->integer('week')->nullable();
+            $table->enum('type', ['weekly', 'standard', 'speed']);
             $table->timestamps();
         });
     }

@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('topic_tests', function (Blueprint $table) {
+        Schema::create('teacher_subjects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('topic_id')->constrained();
-            $table->foreignId('test_id')->constrained();
-            $table->dateTime('taken_at')->nullable();
+            $table->foreignUuid('school_id')->constrained();
+            $table->foreignUuid('teacher_id')->constrained();
+            $table->foreignId('level_id')->constrained();
+            $table->foreignUuid('subject_id')->constrained();
+            $table->unique(['school_id', 'level_id', 'subject_id']);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('topic_tests');
+        Schema::dropIfExists('teacher_subjects');
     }
 };

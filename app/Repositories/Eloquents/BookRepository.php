@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquents;
 
 use App\Models\Book;
+use App\Models\LevelSubject;
 use App\Repositories\Interfaces\BookRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +14,12 @@ class BookRepository implements BookRepositoryInterface
         return Book::all()->toArray();
     }
 
-    function getBookByID(string $book_id): string
+    function getBookByID(string $book_id): array
+    {
+        return Book::find($book_id)->toArray();
+    }
+
+    function getBookFileByID(string $book_id): string
     {
         return Book::find($book_id)->file_path;
     }
@@ -23,11 +29,9 @@ class BookRepository implements BookRepositoryInterface
         return Book::find($book_id)->cover_path;
     }
 
-    function getBooksByClass(string $class): array
+    function getBooksByClass(int $level_id): array
     {
-        return Book::whereHas('level', function($q) use ($class) {
-            $q->where('name', $class);
-        })->get()->toArray();
+        return Book::where('level_id', $level_id)->get()->toArray();
     }
 
     function addBook(array $book_data): array

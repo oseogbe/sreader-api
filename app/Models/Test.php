@@ -10,4 +10,16 @@ class Test extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $with = ['questions'];
+
+    public function testable()
+    {
+        return $this->morphTo();
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(TestQuestion::class);
+    }
 }

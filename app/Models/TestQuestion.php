@@ -5,14 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Level extends Model
+class TestQuestion extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function books()
+    protected $casts = [
+        'options' => 'array'
+    ];
+
+    public function test()
     {
-        return $this->hasMany(Book::class);
+        return $this->belongsTo(Test::class);
     }
 }

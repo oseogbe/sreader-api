@@ -15,6 +15,8 @@ class LevelSeeder extends Seeder
      */
     public function run()
     {
+        Level::truncate();
+
         $levels = ['JS 1', 'JS 2', 'JS 3', 'SS 1', 'SS 2', 'SS 3'];
 
         foreach ($levels as $key => $level) {

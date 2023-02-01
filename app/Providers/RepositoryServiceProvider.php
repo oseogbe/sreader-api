@@ -8,12 +8,14 @@ use App\Repositories\Eloquents\ProfileRepository;
 use App\Repositories\Eloquents\SchoolAdminRepository;
 use App\Repositories\Eloquents\SchoolRepository;
 use App\Repositories\Eloquents\StudentRepository;
+use App\Repositories\Eloquents\TeacherRepository;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Repositories\Interfaces\BookRepositoryInterface;
 use App\Repositories\Interfaces\ProfileRepositoryInterface;
 use App\Repositories\Interfaces\SchoolAdminRepositoryInterface;
 use App\Repositories\Interfaces\SchoolRepositoryInterface;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
+use App\Repositories\Interfaces\TeacherRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -31,6 +33,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
         $this->app->bind(SchoolRepositoryInterface::class, SchoolRepository::class);
         $this->app->bind(SchoolAdminRepositoryInterface::class, SchoolAdminRepository::class);
+        $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class);
     }
 
     /**

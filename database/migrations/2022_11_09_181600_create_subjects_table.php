@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('level_subject', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('level_id')->constrained();
-            $table->foreignUuid('subject_id')->constrained();
+        Schema::create('subjects', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('level_subject');
+        Schema::dropIfExists('subjects');
     }
 };

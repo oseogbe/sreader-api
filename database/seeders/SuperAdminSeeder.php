@@ -16,12 +16,27 @@ class SuperAdminSeeder extends Seeder
      */
     public function run()
     {
-        Admin::create([
-            'firstname' => 'Sarah',
-            'lastname' => 'Egwu',
-            'email' => 'sarahegwu01@gmail.com',
-            'password' => bcrypt('0123456789'),
-            'role' => 'superadmin',
-        ]);
+        Admin::truncate();
+
+        $admins = [
+            [
+                'firstname' => 'Sarah',
+                'lastname' => 'Egwu',
+                'email' => 'sarahegwu01@gmail.com',
+                'password' => bcrypt('0123456789'),
+                'role' => 'superadmin',
+            ],
+            [
+                'firstname' => 'Ose',
+                'lastname' => 'Ogbe',
+                'email' => 'osememen.ogbe@gmail.com',
+                'password' => bcrypt('0123456789'),
+                'role' => 'appadmin',
+            ]
+        ];
+
+        foreach ($admins as $admin) {
+            Admin::create($admin);
+        }
     }
 }

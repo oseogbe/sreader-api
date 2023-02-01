@@ -14,6 +14,16 @@ class Teacher extends Authenticatable
 
     protected $guarded = [];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     public function school()
     {
         return $this->belongsTo(School::class);
@@ -21,6 +31,6 @@ class Teacher extends Authenticatable
 
     public function subjects()
     {
-        return $this->belongsToMany(LevelSubject::class)->with('level', 'subject');
+        return $this->hasMany(TeacherSubject::class)->with('level', 'subject');
     }
 }
