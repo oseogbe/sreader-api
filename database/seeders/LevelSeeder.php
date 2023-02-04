@@ -17,7 +17,7 @@ class LevelSeeder extends Seeder
     {
         Level::truncate();
 
-        $levels = ['JS 1', 'JS 2', 'JS 3', 'SS 1', 'SS 2', 'SS 3'];
+        $levels = ['JS 1 (Year 7)', 'JS 2 (Year 8)', 'JS 3 (Year 9)', 'SS 1 (Year 10)', 'SS 2 (Year 11)', 'SS 3 (Year 12)'];
 
         foreach ($levels as $key => $level) {
             Level::create(['name' => $level]);

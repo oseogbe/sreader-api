@@ -85,6 +85,7 @@ class BookController extends Controller
 
         return response([
             'success' => true,
+            'message' => "$book_data[title] book added",
             'data' => $this->bookRepository->addBook($book_data)
         ], 201);
     }

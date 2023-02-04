@@ -38,8 +38,6 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:student'], function () {
     Route::prefix('books')->group(function () {
 
         Route::get('/', [BookController::class, 'getBooksByStudentClass']);
-        Route::get('/{id}', [BookController::class, 'viewBook']);
-        Route::get('/{id}/cover', [BookController::class, 'viewBookCover']);
     });
 
     Route::post('/single-activation', [ActivationController::class, 'singleActivation']);

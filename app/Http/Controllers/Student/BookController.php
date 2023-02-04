@@ -29,14 +29,4 @@ class BookController extends Controller
             'data' => $this->bookRepository->getBooksByClass($class['id'])
         ]);
     }
-
-    public function viewBook(string $book_id)
-    {
-        return Storage::response($this->bookRepository->getBookFileByID($book_id));
-    }
-
-    public function viewBookCover(string $book_id)
-    {
-        return Storage::response($this->bookRepository->getBookCoverByID($book_id));
-    }
 }

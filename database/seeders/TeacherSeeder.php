@@ -16,6 +16,8 @@ class TeacherSeeder extends Seeder
      */
     public function run()
     {
+        Teacher::truncate();
+
         $a = 0;
 
         while ($a <= 10) {
@@ -23,7 +25,8 @@ class TeacherSeeder extends Seeder
                 'school_id' => School::inRandomOrder()->first()->id,
                 'firstname' => fake()->firstName(),
                 'lastname' => fake()->lastName(),
-                'email' => fake()->freeEmail()
+                'email' => fake()->freeEmail(),
+                'password' => bcrypt('12345678'),
             ]);
 
             $a++;

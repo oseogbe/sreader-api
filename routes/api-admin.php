@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\CopyController;
 use App\Http\Controllers\Admin\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,11 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
         Route::get('/class', [BookController::class, 'getBooksByClass']);
         Route::post('/', [BookController::class, 'store']);
         Route::delete('/', [BookController::class, 'destroy']);
+    });
+
+    Route::prefix('copies')->group(function () {
+
+        Route::post('/', [CopyController::class, 'store']);
     });
 
     Route::prefix('tests')->group(function () {

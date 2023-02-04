@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Level;
-// use App\Models\LevelSubject;
 use App\Models\Subject;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,17 +16,16 @@ class LevelSubjectSeeder extends Seeder
      */
     public function run()
     {
-        // LevelSubject::truncate();
+        $subjects = Subject::all();
 
-        // $levels = Level::all();
+        $subjects->each(function($subject) {
+            $level_ids = Level::all()->pluck('id')->toArray();
 
-        // foreach ($levels as $level) {
-        //     $i = 0;
+            $level_ids_keys =  array_rand($level_ids, mt_rand(3,6));
 
-        //     while ($i < 3) {
-        //         $level->subjects()->attach(Subject::all()->random()->id, ['is_compulsory' => fake()->numberBetween(0, 1)]);
-        //         $i++;
-        //     }
-        // }
+            $subject_level_ids = array_values(array_intersect_key($level_ids, array_flip($level_ids_keys)));
+
+            $subject->update(['level_id' => $subject_level_ids]);
+        });
     }
 }
