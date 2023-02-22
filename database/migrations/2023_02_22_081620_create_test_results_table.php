@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('test_questions', function (Blueprint $table) {
+        Schema::create('test_results', function (Blueprint $table) {
             $table->id();
+            $table->foreignUuid('student_id')->constrained();
             $table->foreignId('test_id')->constrained();
-            $table->tinyText('question');
-            $table->string('image')->nullable();
-            $table->jsonb('options');
-            $table->enum('correct_option', [1, 2, 3, 4, 5]);
+            $table->integer('questions');
+            $table->integer('correct');
+            $table->decimal('score', 3, 1);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test_m_c_q_s');
+        Schema::dropIfExists('test_results');
     }
 };

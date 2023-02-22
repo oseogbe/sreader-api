@@ -5,22 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTestRequest;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
+use App\Repositories\Interfaces\TestRepositoryInterface;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    private AdminRepositoryInterface $adminRepository;
+    private TestRepositoryInterface $testRepository;
 
-    public function __construct(AdminRepositoryInterface $adminRepository)
+    public function __construct(TestRepositoryInterface $testRepository)
     {
-        $this->adminRepository = $adminRepository;
+        $this->testRepository = $testRepository;
     }
 
     public function createTest(CreateTestRequest $request)
     {
         $validated = $request->validated();
 
-        $test = $this->adminRepository->createTestForBook(
+        $test = $this->testRepository->createTestForBook(
             $validated['testable_id'],
             $validated['term'],
             $validated['week'],
@@ -29,7 +30,7 @@ class TestController extends Controller
 
         return response([
             'success' => true,
-            'data' => $this->adminRepository->submitTestQuestions($test['id'], $validated['questions'])
+            'data' => $this->testRepository->submitTestQuestions($test['id'], $validated['questions'])
         ], 201);
     }
 }

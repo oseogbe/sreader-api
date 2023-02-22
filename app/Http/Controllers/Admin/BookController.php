@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadBookRequest;
 use App\Repositories\Interfaces\BookRepositoryInterface;
+use App\Repositories\Interfaces\TestRepositoryInterface;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,10 +14,12 @@ use Kreait\Laravel\Firebase\Facades\Firebase;
 class BookController extends Controller
 {
     private BookRepositoryInterface $bookRepository;
+    private TestRepositoryInterface $testRepository;
 
-    public function __construct(BookRepositoryInterface $bookRepository)
+    public function __construct(BookRepositoryInterface $bookRepository, TestRepositoryInterface $testRepository)
     {
         $this->bookRepository = $bookRepository;
+        $this->testRepository = $testRepository;
     }
 
     public function allBooks()
@@ -97,6 +100,14 @@ class BookController extends Controller
         return response([
             'success' => true,
             'message' => 'Book deleted!'
+        ]);
+    }
+
+    public function getBookTests($book_id)
+    {
+        return response([
+            'success' => true,
+            'data' => $this->testRepository->getTestsForBook($book_id)
         ]);
     }
 }

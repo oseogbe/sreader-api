@@ -14,8 +14,6 @@ class Book extends Model
 
     protected $guarded = [];
 
-    protected $with = ['tests'];
-
     /* @array $appends */
     public $appends = ['cover_size_in_mb', 'cover_url', 'file_size_in_mb', 'file_url'];
 

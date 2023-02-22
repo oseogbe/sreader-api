@@ -4,6 +4,7 @@ use App\Http\Controllers\Student\AuthController;
 use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\BookController;
+use App\Http\Controllers\Student\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,8 +37,12 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:student'], function () {
     Route::post('/class', [ProfileController::class, 'selectClass']);
 
     Route::prefix('books')->group(function () {
-
         Route::get('/', [BookController::class, 'getBooksByStudentClass']);
+        Route::get('/{id}/tests', [BookController::class, 'getBookTests']);
+    });
+
+    Route::prefix('tests')->group(function () {
+        Route::post('/process-result', [TestController::class, 'processTestResult']);
     });
 
     Route::post('/single-activation', [ActivationController::class, 'singleActivation']);

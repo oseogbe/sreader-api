@@ -67,4 +67,9 @@ class Student extends Authenticatable
     {
         return $this->belongsTo(Level::class);
     }
+
+    public function testResults()
+    {
+        return $this->hasMany(TestResult::class);
+    }
 }
