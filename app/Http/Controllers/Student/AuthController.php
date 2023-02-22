@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\EmailRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StudentRegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Mail\ResetPassword;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
     }
 
-    public function register(RegisterRequest $request)
+    public function register(StudentRegisterRequest $request)
     {
         $validated = $request->validated();
 

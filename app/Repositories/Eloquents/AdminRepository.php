@@ -48,8 +48,8 @@ class AdminRepository implements AdminRepositoryInterface
     {
         $schools = School::orderBy('name')->get(['id', 'name']);
         $schools->each(function($school) {
-            $school['pcp'] = $school->admins()->where('is_pcp', true)->select('id', 'firstname', 'lastname', 'email', 'phone_no')->first();
-            $school['scp'] = $school->admins()->where('is_pcp', false)->select('id', 'firstname', 'lastname', 'email', 'phone_no')->inRandomOrder()->first();
+            $school['pcp'] = $school->admins()->where('is_pcp', true)->select('id', 'firstname', 'lastname', 'email', 'phone_number')->first();
+            $school['scp'] = $school->admins()->where('is_pcp', false)->select('id', 'firstname', 'lastname', 'email', 'phone_number')->inRandomOrder()->first();
         });
 
         return $schools->toArray();

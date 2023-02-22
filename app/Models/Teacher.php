@@ -24,6 +24,11 @@ class Teacher extends Authenticatable
         'remember_token',
     ];
 
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
     public function school()
     {
         return $this->belongsTo(School::class);

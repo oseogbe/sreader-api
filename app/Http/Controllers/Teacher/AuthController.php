@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\TeacherRegisterRequest;
 use App\Repositories\Interfaces\TeacherRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,5 +40,21 @@ class AuthController extends Controller
             'success' => false,
             'message' => 'The provided credentials are incorrect.'
         ], 401);
+    }
+
+    public function register(TeacherRegisterRequest $request)
+    {
+        $validated = $request->validated();
+
+        $teacher = $this->teacherRepository->createTeacher($validated);
+
+        $token = $this->teacherRepository->createTeacherAuthToken($teacher['id']);
+
+        return response([
+            'success' => true,
+            'message' => 'Welcome to SReader, ' . $teacher['firstname'],
+            'data' => $this->teacherRepository->getTeacherByID($teacher['id']),
+            'token' => $token['plainTextToken']
+        ], 201);
     }
 }

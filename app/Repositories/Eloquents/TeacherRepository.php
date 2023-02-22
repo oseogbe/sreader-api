@@ -7,12 +7,22 @@ use App\Repositories\Interfaces\TeacherRepositoryInterface;
 
 class TeacherRepository implements TeacherRepositoryInterface {
 
-    public function getTeacherByEmail(string $email): array
+    function createTeacher(array $teacher_data): array
+    {
+        return Teacher::create($teacher_data)->toArray();
+    }
+
+    function getTeacherByID(string $teacher_id): array
+    {
+        return Teacher::findOrFail($teacher_id)->toArray();
+    }
+
+    function getTeacherByEmail(string $email): array
     {
         return Teacher::where('email', $email)->firstOrFail()->toArray();
     }
 
-    public function createTeacherAuthToken(string $teacher_id): array
+    function createTeacherAuthToken(string $teacher_id): array
     {
         $teacher = Teacher::findOrFail($teacher_id);
 
@@ -21,37 +31,37 @@ class TeacherRepository implements TeacherRepositoryInterface {
         return $teacher->createToken('sreader-token', ['teacher'])->toArray();
     }
 
-    public function getTeacherSubjects(string $teacher_id): array
+    function getTeacherSubjects(string $teacher_id): array
     {
         return [];
     }
 
-    public function getTeacherSubjectsByLevel(string $teacher_id, int $level_id): array
+    function getTeacherSubjectsByLevel(string $teacher_id, int $level_id): array
     {
         return [];
     }
 
-    public function getSubjectTopics(int $subject_id): array
+    function getSubjectTopics(int $subject_id): array
     {
         return [];
     }
 
-    public function getTopic(int $topic_id): array
+    function getTopic(int $topic_id): array
     {
         return [];
     }
 
-    public function createTopic(int $level_subject_id, int $week_id): array
+    function createTopic(int $level_subject_id, int $week_id): array
     {
         return [];
     }
 
-    public function updateTopic(int $topic_id): array
+    function updateTopic(int $topic_id): array
     {
         return [];
     }
 
-    public function deleteTopic(int $topic_id): bool
+    function deleteTopic(int $topic_id): bool
     {
         return 0;
     }

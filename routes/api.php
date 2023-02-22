@@ -27,18 +27,3 @@ Route::get('/subjects', function(Request $request) {
     return Subject::select('id', 'name')->get()->toArray();
 });
 
-Route::get('/test', function(Request $request) {
-    $selected_options = $request->selected_options;
-
-    $correct = 0;
-
-    foreach ($selected_options as $selected_option) {
-        $question = TestQuestion::find(data_get($selected_option, 'question_id'));
-
-        if(data_get($selected_option, 'answer') === $question['correct_option']) {
-            $correct++;
-        }
-    }
-
-    return $correct;
-});
