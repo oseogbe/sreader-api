@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('school_admins', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('school_id')->constrained();
+            $table->boolean('is_pcp')->default(false);
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email');
+            $table->string('phone_no')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

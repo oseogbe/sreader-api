@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignUuid('school_id')->nullable()->constrained();
             $table->string('firstname');
             $table->string('lastname');
-            $table->string('email')->nullable();
+            $table->string('email');
+            $table->string('phone_no')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
