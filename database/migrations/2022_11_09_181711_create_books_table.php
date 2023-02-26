@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Level;
+use App\Models\Subject;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +16,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignId('level_id')->constrained();
-            $table->foreignUuid('subject_id')->constrained();
+            $table->string('id')->primary();
+            $table->foreignIdFor(Level::class);
+            $table->string('subject_id');
+            $table->foreign('subject_id')->references('id')->on('subjects');
             $table->unique(['level_id', 'subject_id']);
             $table->string('title');
             $table->string('cover_path')->nullable();

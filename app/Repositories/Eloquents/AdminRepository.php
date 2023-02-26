@@ -3,10 +3,12 @@
 namespace App\Repositories\Eloquents;
 
 use App\Models\Admin;
-use App\Models\Book;
 use App\Models\School;
 use App\Models\SchoolAdmin;
-use App\Models\Test;
+use App\Models\Student;
+use App\Models\StudentParent;
+use App\Models\Teacher;
+use Carbon\Carbon;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 
 class AdminRepository implements AdminRepositoryInterface
@@ -54,4 +56,115 @@ class AdminRepository implements AdminRepositoryInterface
 
         return $schools->toArray();
     }
+
+    public function getDashboardData($filters): array
+    {
+        return [
+            'revenue' => $this->getRevenueSummary(),
+            'users' => $this->getUsersSummary(),
+            'schools' => $this->getSchoolsSummary(),
+            'parents' => $this->getParentsSummary(),
+            'revenue_growth' => $this->getRevenueGrowth(),
+            'user_growth' => $this->getUserGrowth(),
+            'notifications' => $this->getNotifications()
+        ];
+    }
+
+    private function getRevenueSummary()
+    {
+        //
+
+        return [
+            'amount' => 0,
+            'growth' => 0,
+        ];
+    }
+
+    private function getUsersSummary()
+    {
+        $admins = Admin::count();
+        $school_admins = SchoolAdmin::count();
+        $students = Student::count();
+        $teachers = Teacher::count();
+
+        //
+
+        return [
+            'count' => $admins + $this->getNoOfParents() + $this->getNoOfSchools() + $school_admins + $students + $teachers,
+            'growth' => 0,
+        ];
+    }
+
+    private function getSchoolsSummary()
+    {
+        //
+
+        return [
+            'count' => 0,
+            'growth' => 0,
+        ];
+    }
+
+    private function getParentsSummary()
+    {
+        //
+
+        return [
+            'count' => 0,
+            'growth' => 0,
+        ];
+    }
+
+    private function getNoOfSchools()
+    {
+        return School::count();
+    }
+
+    private function getNoOfParents()
+    {
+        return StudentParent::count();
+    }
+
+    private function getRevenueGrowth()
+    {
+        return 0.00;
+    }
+
+    private function getUserGrowth($months = 6)
+    {
+        $joined_at = Carbon::now()->subMonths($months);
+
+        $studentGrowth = Student::selectRaw('YEAR(created_at) year, MONTH(created_at) month, COUNT(*) count')
+                                    ->where('created_at', '>=', $joined_at)
+                                    ->groupBy('year', 'month')
+                                    ->orderBy('year', 'asc')
+                                    ->orderBy('month', 'asc')
+                                    ->get();
+
+        $schoolGrowth = School::selectRaw('YEAR(created_at) year, MONTH(created_at) month, COUNT(*) count')
+                                    ->where('created_at', '>=', $joined_at)
+                                    ->groupBy('year', 'month')
+                                    ->orderBy('year', 'asc')
+                                    ->orderBy('month', 'asc')
+                                    ->get();
+
+        $teacherGrowth = Teacher::selectRaw('YEAR(created_at) year, MONTH(created_at) month, COUNT(*) count')
+                                    ->where('created_at', '>=', $joined_at)
+                                    ->groupBy('year', 'month')
+                                    ->orderBy('year', 'asc')
+                                    ->orderBy('month', 'asc')
+                                    ->get();
+
+        return [
+            'student' => $studentGrowth,
+            'school' => $schoolGrowth,
+            'teacher' => $teacherGrowth,
+        ];
+    }
+
+    private function getNotifications()
+    {
+        return [];
+    }
+
 }

@@ -308,7 +308,7 @@
             "description": "Arbitrary-precision arithmetic library",
             "keywords": [
                 "Arbitrary-precision",
-                "BigInteger",
+                "string",
                 "BigRational",
                 "arithmetic",
                 "bigdecimal",

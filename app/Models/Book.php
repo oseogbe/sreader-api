@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -10,9 +9,16 @@ use Illuminate\Validation\Rule;
 
 class Book extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     protected $guarded = [];
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->id = mt_rand(1000000000, 9999999999);
+        });
+    }
 
     /* @array $appends */
     public $appends = ['cover_size_in_mb', 'cover_url', 'file_size_in_mb', 'file_url'];

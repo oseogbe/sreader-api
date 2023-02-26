@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +16,9 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('testable');     // App\Models\Book or App\Models\Resource
-            $table->foreignUuid('teacher_id')->nullable();      // null if test is created by app admin
+            $table->morphs('testable');     // App\Models\Book or App\Models\Resource
+            $table->string('teacher_id');      // null if test is created by app admin
+            $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->enum('term', [1, 2, 3]);
             $table->integer('week')->nullable();
             $table->enum('type', ['weekly', 'standard', 'speed']);

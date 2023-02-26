@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\CopyController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\Admin\TestController;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']], function () {
+
+    Route::post('/dashboard', DashboardController::class);
 
     Route::prefix('schools')->group(function () {
 

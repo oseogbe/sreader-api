@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\Admin;
+use App\Models\Level;
+use App\Models\Subject;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +16,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('copies', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignId('level_id')->constrained();
-            $table->foreignUuid('subject_id')->constrained();
-            $table->foreignUuid('author')->constrained('admins');
+            $table->string('id')->primary();
+            $table->foreignIdFor(Level::class);
+            $table->string('subject_id');
+            $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->string('author');
+            $table->foreign('author')->references('id')->on('admins');
             $table->enum('term', [1, 2, 3]);
             $table->integer('week');
             $table->string('topic');

@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('parents', function (Blueprint $table) {
+        Schema::create('tickets', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('email')->unique();
-            $table->string('phone_number')->unique()->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->morphs('ticketable');
+            $table->string('subject');
+            $table->text('message');
+            $table->string('priority');
+            $table->enum('status', ['open', 'pending', 'resolved']);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('parents');
+        Schema::dropIfExists('tickets');
     }
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ticket;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('name');
-            $table->jsonb('level_id')->nullable();
+        Schema::create('ticket_comments', function (Blueprint $table) {
+            $table->id();
+            $table->string('ticket_id');
+            $table->foreign('ticket_id')->references('id')->on('tickets');
+            $table->morphs('ticketable');
+            $table->text('comment');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('ticket_comments');
     }
 };

@@ -13,6 +13,13 @@ class TeacherSubject extends Model
 
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->id = mt_rand(1000000000, 9999999999);
+        });
+    }
+
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);

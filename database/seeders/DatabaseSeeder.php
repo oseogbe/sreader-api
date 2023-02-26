@@ -22,9 +22,10 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
             LevelSeeder::class,
             SubjectSeeder::class,
-            SchoolSeeder::class,
-            SchoolAdminSeeder::class,
-            TeacherSeeder::class,
+            // LevelSubjectSeeder::class,
+            // SchoolSeeder::class,
+            // SchoolAdminSeeder::class,
+            // TeacherSeeder::class,
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');

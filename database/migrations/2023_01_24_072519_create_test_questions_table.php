@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('test_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('test_id')->constrained();
+            $table->foreignId('test_id');
             $table->tinyText('question');
             $table->string('image')->nullable();
             $table->jsonb('options');

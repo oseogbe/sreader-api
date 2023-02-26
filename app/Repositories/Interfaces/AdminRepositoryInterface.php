@@ -9,4 +9,5 @@ interface AdminRepositoryInterface
     public function createAdminAuthToken(string $admin_id): array;
     public function createSchoolAdminAuthToken(string $admin_id): array;
     public function getSchools(): array;
+    public function getDashboardData($filters): array;
 }
