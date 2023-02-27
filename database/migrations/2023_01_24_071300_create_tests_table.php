@@ -15,9 +15,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tests', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary();
             $table->morphs('testable');     // App\Models\Book or App\Models\Resource
-            $table->string('teacher_id');      // null if test is created by app admin
+            $table->string('teacher_id')->nullable();      // null if test is created by app admin
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->enum('term', [1, 2, 3]);
             $table->integer('week')->nullable();

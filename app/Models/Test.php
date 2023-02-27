@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Test extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $guarded = [];
+
+    protected $with = ['questions'];
 
     protected static function booted()
     {
@@ -17,8 +20,6 @@ class Test extends Model
             $model->id = mt_rand(1000000000, 9999999999);
         });
     }
-
-    protected $with = ['questions'];
 
     public function testable()
     {

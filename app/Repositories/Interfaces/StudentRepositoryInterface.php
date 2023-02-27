@@ -5,7 +5,7 @@ namespace App\Repositories\Interfaces;
 interface StudentRepositoryInterface
 {
     public function createStudent(array $student_data): array;
-    public function getStudentByID(string $student_id): array;
+    public function getStudentByID(string $student_id);
     public function getStudentByEmail(string $email): array;
     public function getStudentByPhoneNumber(string $phone_number): array;
     public function updateStudent(string $student_id, array $data): bool;

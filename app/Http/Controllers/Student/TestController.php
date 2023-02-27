@@ -25,12 +25,13 @@ class TestController extends Controller
             'selected_options.*.answer' => ['required', 'integer'],
             'test_id' => [
                 'required',
+                'exists:tests,id',
                 Rule::unique('test_results')->where(function ($query) {
                     return $query->where('student_id', Auth::id());
                 })
             ]
         ],[
-            'test_id' => 'Student has already taken test.'
+            'test_id.unique' => 'Student has already taken test.'
         ]);
 
         return response([

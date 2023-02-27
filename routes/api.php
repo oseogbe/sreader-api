@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Resources\StudentResource;
 use App\Models\Level;
-use App\Models\Student;
 use App\Models\Subject;
-use App\Models\TestQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

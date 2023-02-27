@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TeacherSubject extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $table = 'teacher_subjects';
 
     protected $guarded = [];
+
+    protected $casts = [
+        'id' => 'string'
+    ];
 
     protected static function booted()
     {

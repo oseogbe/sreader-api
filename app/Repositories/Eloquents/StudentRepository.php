@@ -15,9 +15,9 @@ class StudentRepository implements StudentRepositoryInterface
         return Student::create($student_data)->toArray();
     }
 
-    function getStudentByID(string $student_id): array
+    function getStudentByID(string $student_id)
     {
-        return Student::findOrFail($student_id)->toArray();
+        return StudentResource::make(Student::findOrFail($student_id));
     }
 
     function getStudentByEmail(string $email): array

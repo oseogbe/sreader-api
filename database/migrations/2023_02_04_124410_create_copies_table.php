@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Level;
-use App\Models\Subject;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
