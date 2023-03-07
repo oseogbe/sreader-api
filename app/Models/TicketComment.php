@@ -10,4 +10,14 @@ class TicketComment extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
+    public function ticketable()
+    {
+        return $this->morphTo();
+    }
 }

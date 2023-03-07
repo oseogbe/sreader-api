@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SchoolAdmin\AuthController;
+use App\Http\Controllers\SchoolAdmin\TicketController;
 use App\Http\Controllers\SchoolAdmin\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,10 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:school-admin']], functio
 
         Route::get('/', [UserController::class, 'viewStudents']);
     });
+
+    Route::prefix('tickets')->group(function () {
+
+        Route::post('/', [TicketController::class, 'open']);
+    });
+
 });

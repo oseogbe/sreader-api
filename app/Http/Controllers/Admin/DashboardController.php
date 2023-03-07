@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $this->adminRepository = $adminRepository;
     }
 
-    public function __invoke(AdminDashboardRequest $request)
+    public function dashboard(AdminDashboardRequest $request)
     {
         $filters = $request->validated();
 
@@ -24,5 +24,19 @@ class DashboardController extends Controller
             'success' => true,
             'data'   => $this->adminRepository->getDashboardData($filters),
         ]);
+    }
+
+    public function markNotificationsAsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+
+        return response(['success' => true]);
+    }
+
+    public function clearNotifications()
+    {
+        auth()->user()->notifications()->delete();
+
+        return response(['success' => true]);
     }
 }

@@ -40,4 +40,14 @@ class SchoolAdmin extends Authenticatable
         return $this->belongsTo(School::class);
     }
 
+    public function tickets()
+    {
+        return $this->morphMany(Ticket::class, 'ticketable');
+    }
+
+    public function ticketReplies()
+    {
+        return $this->morphMany(TicketComment::class, 'ticketable');
+    }
+
 }

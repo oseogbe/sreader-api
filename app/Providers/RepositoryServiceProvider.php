@@ -11,6 +11,7 @@ use App\Repositories\Eloquents\SchoolRepository;
 use App\Repositories\Eloquents\StudentRepository;
 use App\Repositories\Eloquents\TeacherRepository;
 use App\Repositories\Eloquents\TestRepository;
+use App\Repositories\Eloquents\TicketRepository;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Repositories\Interfaces\BookRepositoryInterface;
 use App\Repositories\Interfaces\CopyRepositoryInterface;
@@ -20,6 +21,7 @@ use App\Repositories\Interfaces\SchoolRepositoryInterface;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use App\Repositories\Interfaces\TeacherRepositoryInterface;
 use App\Repositories\Interfaces\TestRepositoryInterface;
+use App\Repositories\Interfaces\TicketRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -40,6 +42,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class);
         $this->app->bind(CopyRepositoryInterface::class, CopyRepository::class);
         $this->app->bind(TestRepositoryInterface::class, TestRepository::class);
+        $this->app->bind(TicketRepositoryInterface::class, TicketRepository::class);
     }
 
     /**

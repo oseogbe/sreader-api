@@ -22,4 +22,14 @@ class Ticket extends Model
             $model->id = mt_rand(1000000000, 9999999999);
         });
     }
+
+    public function comments()
+    {
+        return $this->hasMany(TicketComment::class);
+    }
+
+    public function ticketable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -8,6 +8,7 @@ use App\Models\SchoolAdmin;
 use App\Models\Student;
 use App\Models\StudentParent;
 use App\Models\Teacher;
+use App\Models\Ticket;
 use Carbon\Carbon;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 
@@ -65,7 +66,8 @@ class AdminRepository implements AdminRepositoryInterface
             'schools' => $this->getSchoolsSummary(),
             'parents' => $this->getParentsSummary(),
             'revenue_growth' => $this->getRevenueGrowth(),
-            'user_growth' => $this->getUserGrowth(),
+            'user_growth' => $this->getUserGrowth($filters['user_growth_group_by']),
+            'tickets' => $this->getTickets($filters['tickets_group_by']),
             'notifications' => $this->getNotifications()
         ];
     }
@@ -130,9 +132,9 @@ class AdminRepository implements AdminRepositoryInterface
         return 0.00;
     }
 
-    private function getUserGrowth($months = 6)
+    private function getUserGrowth($group_by)
     {
-        $joined_at = Carbon::now()->subMonths($months);
+        $joined_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
 
         $studentGrowth = Student::selectRaw('YEAR(created_at) year, MONTH(created_at) month, COUNT(*) count')
                                     ->where('created_at', '>=', $joined_at)
@@ -162,9 +164,48 @@ class AdminRepository implements AdminRepositoryInterface
         ];
     }
 
+    public function getTickets($group_by)
+    {
+        $created_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
+
+        $allTickets = Ticket::where('created_at', '>=', $created_at);
+
+        $ATClone = clone $allTickets;
+        $newTickets = $ATClone->whereRaw('date(created_at) = ?', now()->toDateString())->count();
+
+        $ATClone = clone $allTickets;
+        $openTickets = $ATClone->where('status', 'open')->whereRaw('date(created_at) <> ?', now()->toDateString())->count();
+
+        $ATClone = clone $allTickets;
+        $pendingTickets = $ATClone->where('status', 'pending')->whereRaw('date(created_at) <> ?', now()->toDateString())->count();
+
+        $ATClone = clone $allTickets;
+        $resolvedTickets = $ATClone->where('status', 'resolved')->whereRaw('date(created_at) <> ?', now()->toDateString())->count();
+
+        $allTicketsCount = $allTickets->count();
+
+        return [
+            'new' => round($newTickets / $allTicketsCount * 100) ,
+            'open' => round($openTickets / $allTicketsCount * 100),
+            'pending' => round($pendingTickets / $allTicketsCount * 100),
+            'resolved' => round($resolvedTickets / $allTicketsCount * 100),
+        ];
+    }
+
     private function getNotifications()
     {
-        return [];
+        $notifications = [];
+
+        foreach (auth()->user()->notifications as $key => $notification) {
+            switch ($notification->type) {
+                case 'App\Notifications\NewTicketNotification':
+                    $notifications[$key]['text'] = "You have a new ticket from " . $notification->data['school'] . '.';
+                    $notifications[$key]['date'] = Carbon::parse($notification->created_at)->diffForHumans();
+                    break;
+            }
+        }
+
+        return $notifications;
     }
 
 }

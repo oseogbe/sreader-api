@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CopyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\Admin\TestController;
+use App\Http\Controllers\Admin\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,10 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']], function () {
 
-    Route::post('/dashboard', DashboardController::class);
+    Route::post('/dashboard', [DashboardController::class, 'dashboard']);
+
+    Route::get('/notifications/mark-as-read', [DashboardController::class, 'markNotificationsAsRead']);
+    Route::get('/notifications/clear', [DashboardController::class, 'clearNotifications']);
 
     Route::prefix('schools')->group(function () {
 
@@ -43,4 +47,11 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
 
         Route::post('/', [TestController::class, 'createTest']);
     });
+
+    Route::prefix('tickets')->group(function () {
+        Route::get('/', [TicketController::class, 'all']);
+        Route::post('/{ticket_id}/reply', [TicketController::class, 'reply']);
+    });
+
+    Route::post('logout', [AuthController::class, 'logout']);
 });

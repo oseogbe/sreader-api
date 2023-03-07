@@ -55,4 +55,14 @@ class Admin extends Authenticatable
             $model->id = mt_rand(1000000000, 9999999999);
         });
     }
+
+    public function tickets()
+    {
+        return $this->morphMany(Ticket::class, 'ticketable');
+    }
+
+    public function ticketReplies()
+    {
+        return $this->morphMany(TicketComment::class, 'ticketable');
+    }
 }

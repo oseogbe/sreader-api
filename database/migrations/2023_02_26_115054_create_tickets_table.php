@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('subject');
             $table->text('message');
             $table->string('priority');
-            $table->enum('status', ['open', 'pending', 'resolved']);
+            $table->enum('status', ['open', 'pending', 'resolved'])->default('open');
             $table->timestamps();
         });
     }

@@ -24,9 +24,15 @@ class AdminDashboardRequest extends FormRequest
     public function rules()
     {
         return [
-            'tickets_group_by' => ['required', 'string', 'in:week,month,year'],
-            'revenue_group_by' => ['required', 'string', 'in:week,month,year'],
-            'user_growth_group_by' => ['required', 'numeric', 'in:6,12']
+            'tickets_group_by' => ['required', 'array'],
+            'tickets_group_by.value' => ['required', 'numeric', 'min:1'],
+            'tickets_group_by.unit' => ['required', 'in:week,month'],
+            'revenue_group_by' => ['required', 'array'],
+            'revenue_group_by.value' => ['required', 'numeric', 'min:1'],
+            'revenue_group_by.unit' => ['required', 'in:week,month'],
+            'user_growth_group_by' => ['required', 'array'],
+            'user_growth_group_by.value' => ['required', 'numeric', 'min:1'],
+            'user_growth_group_by.unit' => ['required', 'in:week,month'],
         ];
     }
 }
