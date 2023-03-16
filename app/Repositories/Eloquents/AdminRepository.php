@@ -168,27 +168,36 @@ class AdminRepository implements AdminRepositoryInterface
     {
         $created_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
 
-        $allTickets = Ticket::where('created_at', '>=', $created_at);
+        $tickets = Ticket::where('created_at', '>=', $created_at);
 
-        $ATClone = clone $allTickets;
-        $newTickets = $ATClone->whereRaw('date(created_at) = ?', now()->toDateString())->count();
+        $ATClone = clone $tickets;
+        $newTicketsCount = $ATClone->where('status', 'new')->count();
 
-        $ATClone = clone $allTickets;
-        $openTickets = $ATClone->where('status', 'open')->whereRaw('date(created_at) <> ?', now()->toDateString())->count();
+        $ATClone = clone $tickets;
+        $openTicketsCount = $ATClone->where('status', 'open')->count();
 
-        $ATClone = clone $allTickets;
-        $pendingTickets = $ATClone->where('status', 'pending')->whereRaw('date(created_at) <> ?', now()->toDateString())->count();
+        $ATClone = clone $tickets;
+        $pendingTicketsCount = $ATClone->where('status', 'pending')->count();
 
-        $ATClone = clone $allTickets;
-        $resolvedTickets = $ATClone->where('status', 'resolved')->whereRaw('date(created_at) <> ?', now()->toDateString())->count();
+        $ATClone = clone $tickets;
+        $resolvedTicketsCount = $ATClone->where('status', 'resolved')->count();
 
-        $allTicketsCount = $allTickets->count();
+        $ticketsCount = $tickets->count();
+
+        if ($ticketsCount == 0) {
+            return [
+                'new' => 0,
+                'open' => 0,
+                'pending' => 0,
+                'resolved' => 0,
+            ];
+        }
 
         return [
-            'new' => round($newTickets / $allTicketsCount * 100) ,
-            'open' => round($openTickets / $allTicketsCount * 100),
-            'pending' => round($pendingTickets / $allTicketsCount * 100),
-            'resolved' => round($resolvedTickets / $allTicketsCount * 100),
+            'new' => round($newTicketsCount / $ticketsCount * 100) ,
+            'open' => round($openTicketsCount / $ticketsCount * 100),
+            'pending' => round($pendingTicketsCount / $ticketsCount * 100),
+            'resolved' => round($resolvedTicketsCount / $ticketsCount * 100),
         ];
     }
 

@@ -19,6 +19,8 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']], function () {
 
+    Route::get('/user', [AuthController::class, 'user']);
+
     Route::post('/dashboard', [DashboardController::class, 'dashboard']);
 
     Route::get('/notifications/mark-as-read', [DashboardController::class, 'markNotificationsAsRead']);

@@ -42,6 +42,14 @@ class AuthController extends Controller
 
     }
 
+    public function user()
+    {
+        return response([
+            'success' => true,
+            'user' => $this->adminRepository->getAdminByEmail(auth()->user()->email)
+        ]);
+    }
+
     public function logout()
     {
         auth()->user()->tokens()->delete();

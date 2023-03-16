@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReplyTicketRequest;
+use App\Http\Requests\TicketFilterRequest;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -16,11 +17,16 @@ class TicketController extends Controller
         $this->ticketRepository = $ticketRepository;
     }
 
-    public function all()
+    public function all(TicketFilterRequest $request)
     {
+        $filter = $request->validated();
+
         return response([
             'success' => true,
-            'data' => $this->ticketRepository->getTickets()
+            'data' => [
+                'ticket_groups' => $this->ticketRepository->getTicketGroups($filter['tickets_group_by']),
+                'tickets' => $this->ticketRepository->getTickets()
+            ]
         ]);
     }
 
