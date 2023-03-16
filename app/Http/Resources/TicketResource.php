@@ -7,8 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TicketResource extends JsonResource
 {
-    public static $wrap = 'ticket';
-
     /**
      * Transform the resource into an array.
      *

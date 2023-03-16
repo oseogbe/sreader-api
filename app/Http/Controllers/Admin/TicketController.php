@@ -30,12 +30,20 @@ class TicketController extends Controller
         ]);
     }
 
+    public function single(string $ticket_id)
+    {
+        return response([
+            'success' => true,
+            'data' => $this->ticketRepository->getTicket($ticket_id)
+        ]);
+    }
+
     public function open()
     {
 
     }
 
-    public function reply(ReplyTicketRequest $request, $ticket_id)
+    public function reply(ReplyTicketRequest $request, string $ticket_id)
     {
         $validated = $request->validated();
 
@@ -43,5 +51,15 @@ class TicketController extends Controller
             'success' => true,
             'data' => $this->ticketRepository->replyTicket($ticket_id, $validated['message'])
         ], 201);
+    }
+
+    public function markAsResolved(string $ticket_id)
+    {
+        $this->ticketRepository->markTicketAsResolved($ticket_id);
+
+        return response([
+            'success' => true,
+            'message' => 'Ticket marked as resolved'
+        ]);
     }
 }

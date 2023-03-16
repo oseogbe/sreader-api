@@ -37,7 +37,12 @@ class TicketRepository implements TicketRepositoryInterface
 
     function getTickets()
     {
-        return TicketResource::collection(Ticket::latest()->get());
+        return new TicketResourceCollection(Ticket::latest()->get());
+    }
+
+    function getTicket(string $ticket_id)
+    {
+        return new TicketResource(Ticket::findOrFail($ticket_id));
     }
 
     function createTicket(array $ticket_data)
@@ -53,5 +58,12 @@ class TicketRepository implements TicketRepositoryInterface
             'ticket_id' => $ticket->id,
             'message' => $message
         ]);
+    }
+
+    function markTicketAsResolved(string $ticket_id)
+    {
+        $ticket = Ticket::findOrFail($ticket_id);
+
+        return $ticket->update(['status' => 'resolved']);
     }
 }

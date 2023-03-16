@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TicketResourceCollection extends ResourceCollection
@@ -14,25 +15,13 @@ class TicketResourceCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return [
-            'data' => $this->collection,
-            // 'pagination' => [
-            //     'total' => $this->total(),
-            //     'per_page' => $this->perPage(),
-            //     'current_page' => $this->currentPage(),
-            //     'last_page' => $this->lastPage(),
-            //     'from' => $this->firstItem(),
-            //     'to' => $this->lastItem(),
-            // ],
-            'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage()
-                ]
-            ]
-        ];
+        return $this->collection->map(function ($ticket) {
+            return [
+                'id' => $ticket->id,
+                'subject' => $ticket->subject,
+                'status' => $ticket->status,
+                'received' => Carbon::parse($ticket->created_at)->diffForHumans(),
+            ];
+        });
     }
 }
