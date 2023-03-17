@@ -47,10 +47,17 @@ class TicketController extends Controller
     {
         $validated = $request->validated();
 
+        if($this->ticketRepository->replyTicket($ticket_id, $validated['message'])) {
+            return response([
+                'success' => true,
+                'message' => 'Ticket replied'
+            ], 201);
+        }
+
         return response([
-            'success' => true,
-            'data' => $this->ticketRepository->replyTicket($ticket_id, $validated['message'])
-        ], 201);
+            'success' => false,
+            'message' => 'Ticket has already been marked as resolved.'
+        ], 409);
     }
 
     public function markAsResolved(string $ticket_id)

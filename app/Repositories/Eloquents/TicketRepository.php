@@ -4,6 +4,8 @@ namespace App\Repositories\Eloquents;
 
 use App\Http\Resources\TicketResource;
 use App\Http\Resources\TicketResourceCollection;
+use App\Models\Admin;
+use App\Models\SchoolAdmin;
 use App\Models\Ticket;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
 use Carbon\Carbon;
@@ -54,10 +56,27 @@ class TicketRepository implements TicketRepositoryInterface
     {
         $ticket = Ticket::findOrFail($ticket_id);
 
-        return auth()->user()->ticketReplies()->create([
+        $user = auth()->user();
+
+        if($this->checkTicketResolved($ticket->status))
+        {
+            return false;
+        }
+
+        $user->ticketReplies()->create([
             'ticket_id' => $ticket->id,
             'message' => $message
         ]);
+
+        if ($user instanceof Admin) {
+            $ticket->update(['status' => 'pending']);
+        }
+
+        if ($user instanceof SchoolAdmin) {
+            $ticket->update(['status' => 'open']);
+        }
+
+        return true;
     }
 
     function markTicketAsResolved(string $ticket_id)
@@ -65,5 +84,11 @@ class TicketRepository implements TicketRepositoryInterface
         $ticket = Ticket::findOrFail($ticket_id);
 
         return $ticket->update(['status' => 'resolved']);
+    }
+
+    private function checkTicketResolved($status)
+    {
+        if($status == 'resolved') { return true; }
+        return false;
     }
 }

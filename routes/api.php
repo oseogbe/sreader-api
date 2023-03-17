@@ -23,4 +23,3 @@ Route::get('/classes', function(Request $request) {
 Route::get('/subjects', function(Request $request) {
     return Subject::select('id', 'name')->get()->toArray();
 });
-
