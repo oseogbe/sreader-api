@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('logo');
-            $table->tinyText('location');
+            $table->tinyText('address');
+            $table->enum('status', ['active', 'inactive', 'churn'])->default('active');
             $table->timestamps();
         });
     }

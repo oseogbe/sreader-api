@@ -38,8 +38,15 @@ class School extends Model
         return $this->hasMany(Student::class);
     }
 
-    // public function subjectsForLevel($level_id)
-    // {
-    //     return $this->hasMany(Subject::class)->where('level_id', $level_id);
-    // }
+    public function PCP()
+    {
+        return $this->admins()->where('is_pcp', true);
+    }
+
+    public function SCP()
+    {
+        return $this->admins()->where('is_pcp', false)->inRandomOrder()->limit(1);
+    }
+
+
 }

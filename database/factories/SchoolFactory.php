@@ -19,7 +19,7 @@ class SchoolFactory extends Factory
         return [
             'name' => fake()->words(1, true) . ' ' . fake()->randomElement(['secondary school', 'college']),
             'logo' => fake()->regexify('[A-Za-z0-9]{30}') . fake()->randomElement(['.jpg', '.png']),
-            'location' => fake()->sentence
+            'address' => fake()->sentence
         ];
     }
 }

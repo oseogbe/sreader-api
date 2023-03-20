@@ -8,6 +8,6 @@ interface AdminRepositoryInterface
     public function getSchoolAdminByEmail(string $email): array;
     public function createAdminAuthToken(string $admin_id): array;
     public function createSchoolAdminAuthToken(string $admin_id): array;
-    public function getSchools(): array;
+    public function getSchools();
     public function getDashboardData($filters): array;
 }

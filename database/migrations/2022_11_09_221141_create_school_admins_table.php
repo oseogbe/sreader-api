@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone_number')->nullable();
             $table->string('password');
+            $table->string('profile_pic')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

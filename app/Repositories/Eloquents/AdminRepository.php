@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquents;
 
+use App\Http\Resources\SchoolResource;
 use App\Models\Admin;
 use App\Models\School;
 use App\Models\SchoolAdmin;
@@ -47,15 +48,15 @@ class AdminRepository implements AdminRepositoryInterface
         return $admin->createToken('sreader-token', ['school-admin'])->toArray();
     }
 
-    public function getSchools(): array
+    public function getSchools()
     {
-        $schools = School::orderBy('name')->get(['id', 'name']);
+        $schools = School::orderBy('name')->get();
         $schools->each(function($school) {
-            $school['pcp'] = $school->admins()->where('is_pcp', true)->select('id', 'firstname', 'lastname', 'email', 'phone_number')->first();
-            $school['scp'] = $school->admins()->where('is_pcp', false)->select('id', 'firstname', 'lastname', 'email', 'phone_number')->inRandomOrder()->first();
+            $school['pcp'] = $school->PCP;
+            $school['scp'] = $school->SCP;
         });
 
-        return $schools->toArray();
+        return SchoolResource::collection($schools);
     }
 
     public function getDashboardData($filters): array

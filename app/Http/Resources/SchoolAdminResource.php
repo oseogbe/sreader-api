@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SchoolResource extends JsonResource
+class SchoolAdminResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +16,11 @@ class SchoolResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'pcp' => new SchoolAdminResource($this->PCP()->first()),
-            'scp' => new SchoolAdminResource($this->SCP()->first()),
-            'status' => $this->status,
-            'date_added' => Carbon::parse($this->created_at)->format('jS F, Y'),
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'phone_number' => $this->phone_number,
+            'profile_pic' => $this->profile_pic,
         ];
     }
 }
