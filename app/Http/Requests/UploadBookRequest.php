@@ -35,7 +35,7 @@ class UploadBookRequest extends FormRequest
         return [
             'subject_id' => ['required', 'string', 'exists:subjects,id'],
             'level_id' => ['required', 'numeric', 'exists:levels,id'],
-            'title' => ['required', 'string'],
+            'description' => ['required', 'string'],
             'cover' => ['required', 'mimes:png,jpg', 'max:2084'],
             'file' => ['required', 'mimes:epub', 'max:20000'],
             'is_compulsory' => ['boolean'],

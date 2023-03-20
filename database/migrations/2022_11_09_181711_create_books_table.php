@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('subject_id');
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->unique(['level_id', 'subject_id']);
-            $table->string('title');
+            $table->tinyText('description');
             $table->string('cover_path')->nullable();
             $table->double('cover_size', 10, 2)->nullable();
             $table->string('file_path');

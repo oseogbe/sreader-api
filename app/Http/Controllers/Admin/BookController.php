@@ -84,7 +84,7 @@ class BookController extends Controller
             'file_size' => $book_size,
         ]);
 
-        $book_data = $request->only('title', 'level_id', 'subject_id', 'cover_path', 'cover_size', 'file_path', 'file_size', 'is_compulsory', 'department');
+        $book_data = $request->only('description', 'level_id', 'subject_id', 'cover_path', 'cover_size', 'file_path', 'file_size', 'is_compulsory', 'department');
 
         return response([
             'success' => true,
