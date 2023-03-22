@@ -20,7 +20,7 @@ class SchoolAdminResource extends JsonResource
             'lastname' => $this->lastname,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
-            'profile_pic' => $this->profile_pic,
+            'profile_pic' => $this->profile_pic ? $this->profilePicUrl : null
         ];
     }
 }

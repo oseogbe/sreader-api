@@ -35,6 +35,11 @@ class SchoolAdmin extends Authenticatable
         });
     }
 
+    public function getProfilePicUrlAttribute()
+    {
+        return app('firebase.storage')->getBucket()->object($this->profile_pic)->signedUrl(time() + 86400);
+    }
+
     public function school()
     {
         return $this->belongsTo(School::class);

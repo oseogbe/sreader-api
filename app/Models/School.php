@@ -23,6 +23,11 @@ class School extends Model
         });
     }
 
+    public function getLogoUrlAttribute()
+    {
+        return app('firebase.storage')->getBucket()->object($this->logo)->signedUrl(time() + 86400);
+    }
+
     public function admins()
     {
         return $this->hasMany(SchoolAdmin::class);

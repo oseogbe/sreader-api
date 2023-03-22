@@ -50,11 +50,7 @@ class AdminRepository implements AdminRepositoryInterface
 
     public function getSchools()
     {
-        $schools = School::orderBy('name')->get();
-        $schools->each(function($school) {
-            $school['pcp'] = $school->PCP;
-            $school['scp'] = $school->SCP;
-        });
+        $schools = School::orderBy('name')->paginate(10);
 
         return SchoolResource::collection($schools);
     }

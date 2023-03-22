@@ -18,6 +18,8 @@ class SchoolResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'address' => $this->address,
+            'logo' => $this->logo ? $this->logoUrl : null,
             'pcp' => new SchoolAdminResource($this->PCP()->first()),
             'scp' => new SchoolAdminResource($this->SCP()->first()),
             'status' => $this->status,

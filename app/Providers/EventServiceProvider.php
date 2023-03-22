@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\SchoolAdmin;
 use App\Models\Teacher;
 use App\Models\Ticket;
+use App\Observers\SchoolAdminObserver;
 use App\Observers\TeacherObserver;
 use App\Observers\TicketObserver;
 use Illuminate\Auth\Events\Registered;
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Teacher::observe(TeacherObserver::class);
         Ticket::observe(TicketObserver::class);
+        SchoolAdmin::observe(SchoolAdminObserver::class);
     }
 
     /**
