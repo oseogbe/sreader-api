@@ -72,4 +72,9 @@ class Book extends Model
     {
         return round($this->file_size / 1024000, 2);
     }
+
+    public function readingProgress($student_id)
+    {
+        return $this->hasMany(ReadingProgress::class)->where('student_id', $student_id);
+    }
 }

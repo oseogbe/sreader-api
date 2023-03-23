@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReadingProgressRequest;
 use App\Repositories\Interfaces\BookRepositoryInterface;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use App\Repositories\Interfaces\TestRepositoryInterface;
@@ -16,7 +17,9 @@ class BookController extends Controller
     private BookRepositoryInterface $bookRepository;
     private TestRepositoryInterface $testRepository;
 
-    public function __construct(StudentRepositoryInterface $studentRepository, BookRepositoryInterface $bookRepository, TestRepositoryInterface $testRepository)
+    public function __construct(StudentRepositoryInterface $studentRepository,
+                                BookRepositoryInterface $bookRepository,
+                                TestRepositoryInterface $testRepository)
     {
         $this->studentRepository = $studentRepository;
         $this->bookRepository = $bookRepository;
@@ -38,6 +41,18 @@ class BookController extends Controller
         return response([
             'success' => true,
             'data' => $this->testRepository->getTestsForBook($book_id)
+        ]);
+    }
+
+    public function setReadingProgress(ReadingProgressRequest $request, $book_id)
+    {
+        $read_data = $request->validated();
+
+        $this->bookRepository->setReadingProgress($book_id, $read_data);
+
+        return response([
+            'success' => true,
+            'message' => "Reading progress updated"
         ]);
     }
 }

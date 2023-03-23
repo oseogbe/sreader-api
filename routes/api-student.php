@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:student'], function () {
     Route::prefix('books')->group(function () {
         Route::get('/', [BookController::class, 'getBooksByStudentClass']);
         Route::get('/{id}/tests', [BookController::class, 'getBookTests']);
+        Route::post('/{id}/last-read', [BookController::class, 'setReadingProgress']);
     });
 
     Route::prefix('tests')->group(function () {

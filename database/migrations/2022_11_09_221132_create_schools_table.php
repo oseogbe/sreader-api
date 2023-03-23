@@ -20,6 +20,7 @@ return new class extends Migration
             $table->tinyText('address');
             $table->enum('status', ['active', 'inactive', 'churn'])->default('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

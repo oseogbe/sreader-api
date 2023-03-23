@@ -12,4 +12,5 @@ interface BookRepositoryInterface
     public function addBook(array $book_data): array;
     public function getBookByTitle(string $title): array;
     public function deleteBook(string $book_id): bool;
+    public function setReadingProgress(string $book_id, array $read_data): bool;
 }

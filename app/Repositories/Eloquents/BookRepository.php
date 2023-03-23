@@ -3,7 +3,10 @@
 namespace App\Repositories\Eloquents;
 
 use App\Models\Book;
+use App\Models\ReadingProgress;
+use App\Models\Student;
 use App\Repositories\Interfaces\BookRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class BookRepository implements BookRepositoryInterface
@@ -30,6 +33,14 @@ class BookRepository implements BookRepositoryInterface
 
     function getBooksByClass(int $level_id): array
     {
+        if (auth()->user() instanceof Student) {
+            $books = Book::where('level_id', $level_id)->get()->each(function($book) {
+                $book->reading_progress = $book->readingProgress(auth()->id())->select('term', 'topic_no', 'sub_topic_no')->get();
+            });
+
+            return $books->toArray();
+        }
+
         return Book::where('level_id', $level_id)->get()->toArray();
     }
 
@@ -55,5 +66,23 @@ class BookRepository implements BookRepositoryInterface
         Storage::disk('s3')->delete($book->file_path);
 
         return $book->delete();
+    }
+
+    public function setReadingProgress(string $book_id, array $read_data): bool
+    {
+        $read_data = [
+            'term' => $read_data['term'],
+            'topic_no' => $read_data['topic_no'],
+            'sub_topic_no' => $read_data['sub_topic_no']
+        ];
+
+        $reading_progress = ReadingProgress::firstOrCreate(
+                                ['student_id' => auth()->id(), 'book_id' => $book_id], $read_data);
+
+        if ($reading_progress->fill($read_data)->isDirty()) {
+            return $reading_progress->save();
+        }
+
+        return false;
     }
 }
