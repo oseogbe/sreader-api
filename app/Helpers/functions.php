@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -33,17 +34,37 @@ function storeFileOnFirebase($remotefolder, $file)
     }
 }
 
-function paginate($items, $perPage = 10, $page = null)
+function getModelPercentageIncrease($Model, $period)
 {
-    $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+    $unit = $period['unit'];
+    $value = $period['value'];
 
-    $total = count($items);
+    if($unit == 'week')
+    {
+        $firstStartDate = Carbon::now()->subWeeks(($value * 2) - 1)->startOfWeek();
+        $firstEndDate = Carbon::now()->subWeeks($value)->endOfWeek();
 
-    $currentpage = $page;
+        $secondStartDate = Carbon::now()->subWeeks($value - 1)->startOfWeek();
+        $secondEndDate = Carbon::now()->endOfWeek();
+    }
+    else {
+        $firstStartDate = Carbon::now()->subMonths(($value * 2) - 1)->startOfMonth();
+        $firstEndDate = Carbon::now()->subMonths($value)->endOfMonth();
 
-    $offset = ($currentpage * $perPage) - $perPage ;
+        $secondStartDate = Carbon::now()->subMonths($value - 1)->startOfMonth();
+        $secondEndDate = Carbon::now()->endOfMonth();
+    }
 
-    $itemstoshow = array_slice($items, $offset, $perPage);
+    $Model = str_replace('&quot;', '', "App\Models\\$Model");
 
-    return new LengthAwarePaginator($itemstoshow, $total, $perPage);
+    $startCount = $Model::whereBetween('created_at', [$firstStartDate, $firstEndDate])->count();
+
+    $endCount = $Model::whereBetween('created_at', [$secondStartDate, $secondEndDate])->count();
+
+    if($startCount == 0) return 0;
+
+    // calculate the percentage increase
+    $increase = ($endCount - $startCount) / $startCount * 100;
+
+    return $increase;
 }
