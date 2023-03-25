@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class CreateSchoolRequest extends FormRequest
+class EditSchoolRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +25,23 @@ class CreateSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'unique:schools,name'],
-            'address' => ['required', 'string'],
-            'logo' => ['required', 'mimes:png,jpg,svg', 'max:2084'],
-            'pcp' => ['required', 'array'],
-            'pcp.name' => ['required', 'string'],
-            'pcp.phone_number' => ['required', 'max_digits:11', 'min_digits:11', 'unique:school_admins,phone_number'],
-            'pcp.email' => ['required', 'email', 'unique:school_admins,email'],
-            'pcp.profile_pic' => ['required', 'mimes:png,jpg', 'max:2084'],
-            'scp' => ['required', 'array'],
-            'scp.name' => ['required', 'string'],
-            'scp.phone_number' => ['required', 'max_digits:11', 'min_digits:11', 'unique:school_admins,phone_number'],
-            'scp.email' => ['required', 'email', 'unique:school_admins,email'],
-            'scp.profile_pic' => ['required', 'mimes:png,jpg', 'max:2084'],
-            'number_of_requests' => ['required', 'numeric'],
-            'send_invoice_to_mail' => ['required', 'boolean']
+            'name' => ['sometimes', 'required', 'string', Rule::unique('schools')->ignore(request()->school_id)],
+            'address' => ['sometimes', 'required', 'string'],
+            'logo' => ['sometimes', 'required', 'mimes:png,jpg,svg'],
+            'pcp' => ['sometimes', 'required', 'array'],
+            'pcp.id' => ['sometimes', 'required', 'string', 'exists:school_admins,id'],
+            'pcp.name' => ['sometimes', 'required', 'string'],
+            'pcp.phone_number' => ['sometimes', 'required', 'max_digits:11', 'min_digits:11', Rule::unique('school_admins', 'phone_number')->ignore(request()->input('pcp.id'))],
+            'pcp.email' => ['sometimes', 'required', 'email', Rule::unique('school_admins', 'email')->ignore(request()->input('pcp.id'))],
+            'pcp.profile_pic' => ['sometimes', 'required', 'mimes:png,jpg', 'max:2084'],
+            'scp' => ['sometimes', 'required', 'array'],
+            'scp.id' => ['sometimes', 'required', 'string', 'exists:school_admins,id'],
+            'scp.name' => ['sometimes', 'required', 'string'],
+            'scp.phone_number' => ['sometimes', 'required', 'max_digits:11', 'min_digits:11', Rule::unique('school_admins', 'phone_number')->ignore(request()->input('scp.id'))],
+            'scp.email' => ['sometimes', 'required', 'email', Rule::unique('school_admins', 'email')->ignore(request()->input('scp.id'))],
+            'scp.profile_pic' => ['sometimes', 'required', 'mimes:png,jpg', 'max:2084'],
+            'number_of_requests' => ['sometimes', 'required', 'numeric'],
+            'send_invoice_to_mail' => ['sometimes', 'required', 'boolean']
         ];
     }
 

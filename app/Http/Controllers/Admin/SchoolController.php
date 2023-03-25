@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSchoolRequest;
+use App\Http\Requests\EditSchoolRequest;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Repositories\Interfaces\SchoolRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -33,52 +35,29 @@ class SchoolController extends Controller
 
     public function addSchool(CreateSchoolRequest $request)
     {
-        $validated = $request->validated();
+        $validated = $request->customValidated();
 
         DB::beginTransaction();
 
         try {
-            $logo = storeFileOnFirebase("schools/$validated[name]/logo", $validated['logo']);
+            $school_data = Arr::only($validated, ['name', 'address', 'logo']);
 
-            $school = $this->schoolRepository->createSchool(array_merge($request->only('name', 'address'), ['logo' => $logo]));
+            $school = $this->schoolRepository->createSchool($school_data);
 
-            $pcp_data = $request->only('pcp.phone_number', 'pcp.email');
-            $scp_data = $request->only('scp.phone_number', 'scp.email');
+            $pcp_data = array_merge([
+                'school_id' => $school['id'],
+                'is_pcp' => 1,
+                'password' => bcrypt('12345678')
+            ], Arr::only($validated['pcp'], ['firstname', 'lastname', 'phone_number', 'email', 'profile_pic']));
 
-            $pcp_profile_pic = storeFileOnFirebase("schools/$validated[name]/admins/profile_pic", $validated['pcp']['profile_pic']);
-            $scp_profile_pic = storeFileOnFirebase("schools/$validated[name]/admins/profile_pic", $validated['scp']['profile_pic']);
+            $school['admins']['pcp'] = $this->schoolRepository->createSchoolAdmin($pcp_data);
 
-            $pcp_name = $request->input('pcp.name');
-            $pcp_name_words = str_word_count($pcp_name, 1);
-            $pcp_firstname = $pcp_name_words[0];
-            $pcp_lastname = $pcp_name_words[count($pcp_name_words) - 1];
+            $scp_data = array_merge([
+                'school_id' => $school['id'],
+                'password' => bcrypt('12345678'),
+            ], Arr::only($validated['pcp'], ['firstname', 'lastname', 'phone_number', 'email', 'profile_pic']));
 
-            $scp_name = $request->input('scp.name');
-            $scp_name_words = str_word_count($scp_name, 1);
-            $scp_firstname = $scp_name_words[0];
-            $scp_lastname = $scp_name_words[count($scp_name_words) - 1];
-
-            $school_admins = [
-                $pcp = array_merge($pcp_data['pcp'],
-                            [
-                                'school_id' => $school['id'],
-                                'is_pcp' => 1,
-                                'firstname' => $pcp_firstname,
-                                'lastname' => $pcp_lastname,
-                                'profile_pic' => $pcp_profile_pic,
-                                'password' => bcrypt('12345678')
-                            ]),
-                $scp = array_merge($scp_data['scp'],
-                            [
-                                'school_id' => $school['id'],
-                                'firstname' => $scp_firstname,
-                                'lastname' => $scp_lastname,
-                                'profile_pic' => $scp_profile_pic,
-                                'password' => bcrypt('12345678')
-                            ]),
-            ];
-
-            $school['admins'] = $this->schoolRepository->createSchoolAdmins($school_admins);
+            $school['admins']['scp'] = $this->schoolRepository->createSchoolAdmin($scp_data);
 
             DB::commit();
 
@@ -94,6 +73,43 @@ class SchoolController extends Controller
         }
     }
 
-    // create school admin
-    // set pcp to true for first one created
+    public function updateSchool(EditSchoolRequest $request, $school_id)
+    {
+        $validated = $request->customValidated();
+
+        DB::beginTransaction();
+
+        try {
+            $school_data = Arr::only($validated, ['name', 'address', 'logo']);
+
+            $school = $this->schoolRepository->editSchool($school_id, $school_data);
+
+            if (Arr::has($validated, 'pcp')) {
+                $this->schoolRepository->editSchoolAdmin(
+                    Arr::get($validated, 'pcp.id'),
+                    Arr::only($validated['pcp'], ['firstname', 'lastname', 'phone_number', 'email', 'profile_pic'])
+                );
+            }
+
+            if(Arr::has($validated, 'scp'))
+            {
+                $this->schoolRepository->editSchoolAdmin(
+                    Arr::get($validated, 'scp.id'),
+                    Arr::only($validated['scp'], ['firstname', 'lastname', 'phone_number', 'email', 'profile_pic'])
+                );
+            }
+
+            DB::commit();
+
+            return response([
+                'success' => true,
+                'message' => "$school[name] information updated!",
+            ]);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
 }

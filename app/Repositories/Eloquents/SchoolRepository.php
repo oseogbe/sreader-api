@@ -24,14 +24,28 @@ class SchoolRepository implements SchoolRepositoryInterface
         return School::create($school_data)->toArray();
     }
 
-    function createSchoolAdmins(array $admins): array
+    function createSchoolAdmin(array $admin_data): array
     {
-        $school_admins = [];
+        $school_admin = SchoolAdmin::create($admin_data);
 
-        foreach ($admins as $admin) {
-            $school_admins[] = SchoolAdmin::create($admin);
-        }
+        return $school_admin->toArray();
+    }
 
-        return $school_admins;
+    function editSchool(string $school_id, array $school_data): array
+    {
+        $school = School::findOrFail($school_id);
+
+        $school->update($school_data);
+
+        return $school->toArray();
+    }
+
+    function editSchoolAdmin(string $admin_id, array $admin_data): array
+    {
+        $school_admin = SchoolAdmin::findOrFail($admin_id);
+
+        $school_admin->update($admin_data);
+
+        return $school_admin->toArray();
     }
 }

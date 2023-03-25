@@ -1,8 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 function getSubjectNameById($id)
@@ -67,4 +65,14 @@ function getModelPercentageIncrease($Model, $period)
     $increase = ($endCount - $startCount) / $startCount * 100;
 
     return $increase;
+}
+
+
+function getFirstAndLastName($name)
+{
+    $name_words = str_word_count($name, 1);
+    $firstname = $name_words[0];
+    $lastname = $name_words[count($name_words) - 1];
+
+    return [$firstname, $lastname];
 }
