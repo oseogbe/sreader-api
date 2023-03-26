@@ -53,11 +53,11 @@ function getModelPercentageIncrease($Model, $period)
         $secondEndDate = Carbon::now()->endOfMonth();
     }
 
-    $Model = str_replace('&quot;', '', "App\Models\\$Model");
+    // $Model = str_replace('&quot;', '', "App\Models\\$Model");
 
-    $startCount = $Model::whereBetween('created_at', [$firstStartDate, $firstEndDate])->count();
+    $startCount = $Model->whereBetween('created_at', [$firstStartDate, $firstEndDate])->count();
 
-    $endCount = $Model::whereBetween('created_at', [$secondStartDate, $secondEndDate])->count();
+    $endCount = $Model->whereBetween('created_at', [$secondStartDate, $secondEndDate])->count();
 
     if($startCount == 0) return 0;
 

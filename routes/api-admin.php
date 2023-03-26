@@ -28,8 +28,8 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
 
     Route::prefix('schools')->group(function () {
 
-        Route::get('/', [SchoolController::class, 'allSchools']);
-        Route::post('/', [SchoolController::class, 'addSchool']);
+        Route::post('/all', [SchoolController::class, 'allSchools']);
+        Route::post('/add', [SchoolController::class, 'addSchool']);
         Route::patch('/{school_id}', [SchoolController::class, 'updateSchool']);
     });
 
@@ -53,7 +53,7 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
     });
 
     Route::prefix('tickets')->group(function () {
-        Route::get('/', [TicketController::class, 'all']);
+        Route::post('/', [TicketController::class, 'all']);
         Route::get('/{ticket_id}', [TicketController::class, 'single']);
         Route::post('/{ticket_id}/reply', [TicketController::class, 'reply']);
         Route::post('/{ticket_id}/mark-as-resolved', [TicketController::class, 'markAsResolved']);

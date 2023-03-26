@@ -25,12 +25,10 @@ class SchoolController extends Controller
 
     public function allSchools()
     {
-        // return response([
-        //     'success' => true,
-        //     'data' => $this->adminRepository->getSchools()
-        // ]);
-
-        return $this->adminRepository->getSchools();
+        return response([
+            'success' => true,
+            'data' => $this->adminRepository->getSchools()
+        ]);
     }
 
     public function addSchool(CreateSchoolRequest $request)
