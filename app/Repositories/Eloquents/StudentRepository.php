@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquents;
 
 use App\Http\Resources\StudentResource;
+use App\Http\Resources\StudentResourceCollection;
 use App\Models\Student;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Carbon\Carbon;
@@ -10,6 +11,54 @@ use Illuminate\Support\Facades\DB;
 
 class StudentRepository implements StudentRepositoryInterface
 {
+    function getStudentsData(): array
+    {
+        $students = Student::orderBy('firstname');
+
+        if($filter = request()->filter ?? ['unit' => 'month', 'value' => 6]) {
+            $joined_at = $filter['unit'] == 'week' ? Carbon::now()->subWeeks($filter['value']) : Carbon::now()->subMonths($filter['value']);
+            $students = $students->where('created_at', '>=', $joined_at);
+        }
+
+        $students_clone = clone $students;
+        $students_no = $students_clone->count();
+        $students_no_growth = getModelPercentageIncrease($students_clone, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+
+        $students_clone = clone $students;
+        $students_new = $students_clone->where('created_at', '>=', Carbon::now()->subWeek());
+        $students_new_no = $students_new->count();
+        $students_new_no_growth = getModelPercentageIncrease($students_new, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+
+        $students_clone = clone $students;
+        $students_active = $students_clone->where('status', 'active');
+        $students_active_no = $students_active->count();
+        $students_active_no_growth = getModelPercentageIncrease($students_active, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+
+        $students_clone = clone $students;
+        $students_inactive = $students_clone->where('status', 'inactive');
+        $students_inactive_no = $students_inactive->count();
+        $students_inactive_no_growth = getModelPercentageIncrease($students_inactive, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+
+        return array_merge([
+            'all' => [
+                'count' => $students_no,
+                'growth' => $students_no_growth,
+            ],
+            'new' => [
+                'count' => $students_new_no,
+                'growth' => $students_new_no_growth,
+            ],
+            'active' => [
+                'count' => $students_active_no,
+                'growth' => $students_active_no_growth,
+            ],
+            'inactive' => [
+                'count' => $students_inactive_no,
+                'growth' => $students_inactive_no_growth,
+            ]
+        ], (new StudentResourceCollection($students->paginate(10)))->jsonSerialize());
+    }
+
     function createStudent(array $student_data): array
     {
         return Student::create($student_data)->toArray();

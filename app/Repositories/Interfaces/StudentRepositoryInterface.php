@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 interface StudentRepositoryInterface
 {
+    public function getStudentsData(): array;
     public function createStudent(array $student_data): array;
     public function getStudentByID(string $student_id);
     public function getStudentByEmail(string $email): array;

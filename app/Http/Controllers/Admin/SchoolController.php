@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSchoolRequest;
 use App\Http\Requests\EditSchoolRequest;
-use App\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Repositories\Interfaces\SchoolRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -14,12 +13,10 @@ use Throwable;
 
 class SchoolController extends Controller
 {
-    private AdminRepositoryInterface $adminRepository;
     private SchoolRepositoryInterface $schoolRepository;
 
-    public function __construct(AdminRepositoryInterface $adminRepository, SchoolRepositoryInterface $schoolRepository)
+    public function __construct(SchoolRepositoryInterface $schoolRepository)
     {
-        $this->adminRepository = $adminRepository;
         $this->schoolRepository = $schoolRepository;
     }
 
@@ -27,7 +24,7 @@ class SchoolController extends Controller
     {
         return response([
             'success' => true,
-            'data' => $this->adminRepository->getSchools()
+            'data' => $this->schoolRepository->getSchoolsData()
         ]);
     }
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\CopyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SchoolController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\TicketController;
 use Illuminate\Http\Request;
@@ -31,6 +32,13 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
         Route::post('/all', [SchoolController::class, 'allSchools']);
         Route::post('/add', [SchoolController::class, 'addSchool']);
         Route::patch('/{school_id}', [SchoolController::class, 'updateSchool']);
+    });
+
+    Route::prefix('students')->group(function () {
+
+        Route::post('/all', [StudentController::class, 'allStudents']);
+        Route::post('/add', [StudentController::class, 'addStudent']);
+        // Route::patch('/{student_id}', [StudentController::class, 'updateStudent']);
     });
 
     Route::prefix('books')->group(function () {

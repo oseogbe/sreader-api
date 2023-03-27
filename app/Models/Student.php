@@ -82,4 +82,9 @@ class Student extends Authenticatable
     {
         return $this->hasMany(TestResult::class);
     }
+
+    public function studentParents()
+    {
+        return $this->belongsToMany(StudentParent::class, 'parent_student', 'student_id', 'parent_id');
+    }
 }

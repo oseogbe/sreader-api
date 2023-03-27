@@ -49,49 +49,6 @@ class AdminRepository implements AdminRepositoryInterface
         return $admin->createToken('sreader-token', ['school-admin'])->toArray();
     }
 
-    public function getSchools()
-    {
-        $schools = School::orderBy('name');
-
-        if($group_by = request()->school_group_by ?? ['unit' => 'month', 'value' => 6]) {
-            $joined_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
-            $schools = $schools->where('created_at', '>=', $joined_at);
-        }
-
-        $schools_clone = clone $schools;
-        $schools_no = $schools_clone->count();
-        $schools_no_growth = getModelPercentageIncrease($schools_clone, ['unit' => $group_by['unit'], 'value' => $group_by['value']]);
-
-        $schools_clone = clone $schools;
-        $schools_active = $schools_clone->where('status', 'active');
-        $schools_active_no = $schools_active->count();
-        $schools_active_no_growth = getModelPercentageIncrease($schools_active, ['unit' => $group_by['unit'], 'value' => $group_by['value']]);
-
-        $schools_clone = clone $schools;
-        $schools_inactive = $schools_clone->where('status', 'inactive');
-        $schools_inactive_no = $schools_inactive->count();
-        $schools_inactive_no_growth = getModelPercentageIncrease($schools_inactive, ['unit' => $group_by['unit'], 'value' => $group_by['value']]);
-
-        return array_merge([
-            'revenue' => [
-                'count' => 0,
-                'growth' => 0,
-            ],
-            'all' => [
-                'count' => $schools_no,
-                'growth' => $schools_no_growth,
-            ],
-            'active' => [
-                'count' => $schools_active_no,
-                'growth' => $schools_active_no_growth,
-            ],
-            'inactive' => [
-                'count' => $schools_inactive_no,
-                'growth' => $schools_inactive_no_growth,
-            ]
-        ], (new SchoolResourceCollection($schools->paginate(10)))->jsonSerialize());
-    }
-
     public function getDashboardData($filters): array
     {
         return [

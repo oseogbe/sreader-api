@@ -23,7 +23,8 @@ class StudentResource extends JsonResource
             'phone_number' => $this->phone_number,
             'status' => $this->status,
             'school' => SchoolResource::make($this->school),
-            'level' => LevelResource::make($this->level)
+            'level' => LevelResource::make($this->level),
+            'parent_id' => $this->studentParents
         ];
     }
 }
