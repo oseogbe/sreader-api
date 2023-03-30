@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\School;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +23,10 @@ class TicketResource extends JsonResource
             'priority' => $this->priority,
             'status' => $this->status,
             'received' => Carbon::parse($this->created_at)->diffForHumans(),
-            'school' => SchoolResource::make($this->ticketable->school),
+            'sender' => $this->school ? "school" : "admin",
+            'school' => $this->ticketable instanceof School ?
+                        $this->ticketable()->select('id', 'name')->get() :
+                        $this->receivable()->select('id', 'name')->get(),
             'comments' => TicketCommentResource::collection($this->comments),
         ];
     }

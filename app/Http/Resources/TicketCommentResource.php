@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\School;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TicketCommentResource extends JsonResource
@@ -15,7 +16,7 @@ class TicketCommentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'school' => SchoolResource::make($this->ticketable->school),
+            'sender' => $this->ticketable instanceof School ? "school" : "admin",
             'message' => $this->message
         ];
     }

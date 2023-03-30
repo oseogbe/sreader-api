@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminTicketRequest;
 use App\Http\Requests\ReplyTicketRequest;
 use App\Http\Requests\TicketFilterRequest;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
@@ -38,9 +39,14 @@ class TicketController extends Controller
         ]);
     }
 
-    public function open()
+    public function open(AdminTicketRequest $request)
     {
+        $validated = $request->customValidated();
 
+        return response([
+            'success' => true,
+            'data' => $this->ticketRepository->createTicket($validated)
+        ], 201);
     }
 
     public function reply(ReplyTicketRequest $request, string $ticket_id)

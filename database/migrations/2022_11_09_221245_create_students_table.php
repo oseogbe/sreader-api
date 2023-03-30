@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('school_id');
             $table->foreign('school_id')->references('id')->on('schools');
             $table->foreignIdFor(Level::class)->nullable();
+            $table->string('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('parents');
             $table->string('firstname');
             $table->string('lastname');
             $table->string('middlename')->nullable();
@@ -28,8 +30,9 @@ return new class extends Migration
             $table->string('phone_number')->unique()->nullable();
             $table->string('password');
             $table->string('status')->default('inactive');
-            $table->dateTime('activated_at')->nullable();
             $table->rememberToken();
+            $table->dateTime('activated_at')->nullable();
+            $table->dateTime('deactivated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

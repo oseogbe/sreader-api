@@ -61,8 +61,9 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
     });
 
     Route::prefix('tickets')->group(function () {
-        Route::post('/', [TicketController::class, 'all']);
+        Route::post('/all', [TicketController::class, 'all']);
         Route::get('/{ticket_id}', [TicketController::class, 'single']);
+        Route::post('/open', [TicketController::class, 'open']);
         Route::post('/{ticket_id}/reply', [TicketController::class, 'reply']);
         Route::post('/{ticket_id}/mark-as-resolved', [TicketController::class, 'markAsResolved']);
     });

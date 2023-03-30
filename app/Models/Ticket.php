@@ -32,4 +32,9 @@ class Ticket extends Model
     {
         return $this->morphTo();
     }
+
+    public function receivable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->morphs('ticketable');
+            $table->morphs('receivable');
             $table->string('subject');
             $table->text('message');
             $table->string('priority');

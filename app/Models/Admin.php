@@ -62,6 +62,11 @@ class Admin extends Authenticatable
         return $this->morphMany(Ticket::class, 'ticketable');
     }
 
+    public function ticketsReceived()
+    {
+        return $this->morphMany(Ticket::class, 'receivable');
+    }
+
     public function ticketReplies()
     {
         return $this->morphMany(TicketComment::class, 'ticketable');

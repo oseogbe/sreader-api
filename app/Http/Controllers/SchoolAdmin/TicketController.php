@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\SchoolAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateTicketRequest;
+use App\Http\Requests\ReplyTicketRequest;
+use App\Http\Requests\SchoolTicketRequest;
+use App\Http\Requests\TicketFilterRequest;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,28 @@ class TicketController extends Controller
         $this->ticketRepository = $ticketRepository;
     }
 
-    public function open(CreateTicketRequest $request)
+    public function all(TicketFilterRequest $request)
+    {
+        $filter = $request->validated();
+
+        return response([
+            'success' => true,
+            'data' => [
+                'ticket_groups' => $this->ticketRepository->getTicketGroupsForSchool($filter['tickets_group_by']),
+                'tickets' => $this->ticketRepository->getTicketsForSchool()
+            ]
+        ]);
+    }
+
+    public function single(string $ticket_id)
+    {
+        return response([
+            'success' => true,
+            'data' => $this->ticketRepository->getTicket($ticket_id)
+        ]);
+    }
+
+    public function open(SchoolTicketRequest $request)
     {
         $validated = $request->validated();
 
@@ -26,9 +49,30 @@ class TicketController extends Controller
         ], 201);
     }
 
-    public function reply()
+    public function reply(ReplyTicketRequest $request, string $ticket_id)
     {
+        $validated = $request->validated();
 
+        if($this->ticketRepository->replyTicket($ticket_id, $validated['message'])) {
+            return response([
+                'success' => true,
+                'message' => 'Ticket replied'
+            ], 201);
+        }
+
+        return response([
+            'success' => false,
+            'message' => 'Ticket has already been marked as resolved.'
+        ], 409);
     }
 
+    public function markAsResolved(string $ticket_id)
+    {
+        $this->ticketRepository->markTicketAsResolved($ticket_id);
+
+        return response([
+            'success' => true,
+            'message' => 'Ticket marked as resolved'
+        ]);
+    }
 }
