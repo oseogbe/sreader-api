@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquents;
 
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentResourceCollection;
+use App\Http\Resources\TestResultResource;
 use App\Models\Student;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Carbon\Carbon;
@@ -57,6 +58,15 @@ class StudentRepository implements StudentRepositoryInterface
                 'growth' => $students_inactive_no_growth,
             ]
         ], (new StudentResourceCollection($students->paginate(10)))->jsonSerialize());
+    }
+
+    function getStudentData(string $student_id): array
+    {
+        $student = Student::find($student_id);
+
+        return array_merge([
+            TestResultResource::collection($student->latestTestResults)
+        ], (new StudentResource($student))->jsonSerialize());
     }
 
     function createStudent(array $student_data): array

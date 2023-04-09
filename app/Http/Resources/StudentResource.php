@@ -21,6 +21,7 @@ class StudentResource extends JsonResource
             'middlename' => $this->middlename,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
+            'profile_pic' => $this->profile_pic,
             'status' => $this->status,
             'school' => SchoolResource::make($this->school),
             'level' => LevelResource::make($this->level),

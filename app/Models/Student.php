@@ -32,6 +32,7 @@ class Student extends Authenticatable
         'email',
         'password',
         'phone_number',
+        'profile_pic',
         'status',
         'activated_at',
     ];
@@ -81,6 +82,11 @@ class Student extends Authenticatable
     public function testResults()
     {
         return $this->hasMany(TestResult::class);
+    }
+
+    public function latestTestResults()
+    {
+        return $this->hasMany(TestResult::class)->latest();
     }
 
     // public function studentParents()
