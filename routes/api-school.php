@@ -29,7 +29,7 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:school-admin']], functio
     });
 
     Route::prefix('tickets')->group(function () {
-        Route::post('/all', [TicketController::class, 'all']);
+        Route::get('/', [TicketController::class, 'all']);
         Route::get('/{ticket_id}', [TicketController::class, 'single']);
         Route::post('/open', [TicketController::class, 'open']);
         Route::post('/{ticket_id}/reply', [TicketController::class, 'reply']);
