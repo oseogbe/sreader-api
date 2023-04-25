@@ -26,7 +26,7 @@ class StudentRegisterRequest extends FormRequest
     {
         return [
             'level_id' => ['required', 'numeric'],
-            'school_id' => ['required', 'string', 'exists:schools,id'],
+            'school_id' => ['sometimes', 'required', 'string', 'exists:schools,id'],
             'firstname' => ['required', 'string', 'max:50'],
             'lastname' => ['required', 'string', 'max:50'],
             'middlename' => ['nullable', 'string', 'max:50'],
