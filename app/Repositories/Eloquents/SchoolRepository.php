@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquents;
 
+use App\Http\Resources\SchoolResource;
 use App\Http\Resources\SchoolResourceCollection;
 use App\Models\School;
 use App\Models\SchoolAdmin;
@@ -52,6 +53,13 @@ class SchoolRepository implements SchoolRepositoryInterface
                 'growth' => $schools_inactive_no_growth,
             ]
         ], (new SchoolResourceCollection($schools->paginate(10)))->jsonSerialize());
+    }
+
+    function getSchoolData($school_id): array
+    {
+        $school = School::find($school_id);
+
+        return (new SchoolResource($school))->jsonSerialize();
     }
 
     function getAdmins(string $school_id): array

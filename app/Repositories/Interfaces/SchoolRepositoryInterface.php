@@ -5,6 +5,7 @@ namespace App\Repositories\Interfaces;
 interface SchoolRepositoryInterface
 {
     public function getSchoolsData(): array;
+    public function getSchoolData(string $school_id): array;
     public function getAdmins(string $school_id): array;
     public function getTeachers(string $school_id): array;
     public function createSchool(array $school_data): array;

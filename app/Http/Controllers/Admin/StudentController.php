@@ -24,15 +24,11 @@ class StudentController extends Controller
         ]);
     }
 
-    public function getStudentInfo()
+    public function getStudentInfo(string $student_id)
     {
-        request()->validate([
-            'student_id' => ['required', 'string', 'exists:students,id'],
-        ]);
-
         return response([
             'success' => true,
-            'data' => $this->studentRepository->getStudentData(request('student_id'))
+            'data' => $this->studentRepository->getStudentData($student_id)
         ]);
     }
 

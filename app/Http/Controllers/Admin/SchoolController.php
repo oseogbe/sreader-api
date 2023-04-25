@@ -28,6 +28,14 @@ class SchoolController extends Controller
         ]);
     }
 
+    public function getSchool(string $school_id)
+    {
+        return response([
+            'success' => true,
+            'data' => $this->schoolRepository->getSchoolData($school_id)
+        ]);
+    }
+
     public function addSchool(CreateSchoolRequest $request)
     {
         $validated = $request->customValidated();

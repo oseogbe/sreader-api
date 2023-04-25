@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
     Route::prefix('schools')->group(function () {
 
         Route::get('/', [SchoolController::class, 'allSchools']);
+        Route::get('/{school_id}', [SchoolController::class, 'getSchool']);
         Route::post('/', [SchoolController::class, 'addSchool']);
         Route::patch('/{school_id}', [SchoolController::class, 'updateSchool']);
     });

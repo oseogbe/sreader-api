@@ -64,9 +64,9 @@ class StudentRepository implements StudentRepositoryInterface
     {
         $student = Student::find($student_id);
 
-        return array_merge([
-            TestResultResource::collection($student->latestTestResults)
-        ], (new StudentResource($student))->jsonSerialize());
+        return array_merge((new StudentResource($student))->jsonSerialize(), [
+            "tests" => TestResultResource::collection($student->latestTestResults)
+        ]);
     }
 
     function createStudent(array $student_data): array
