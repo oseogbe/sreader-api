@@ -34,7 +34,7 @@ class StudentController extends Controller
 
     public function addStudent(AdminStudentRegisterRequest $request)
     {
-        $validated = $request->validated();
+        $validated = $request->customValidated();
 
         $student = $this->studentRepository->createStudent($validated);
 

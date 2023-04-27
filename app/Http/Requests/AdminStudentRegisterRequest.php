@@ -47,12 +47,16 @@ class AdminStudentRegisterRequest extends FormRequest
         ];
     }
 
-    protected function passedValidation()
+    public function customValidated()
     {
-        $this->merge([
-            'password' => bcrypt(generateRandomString(8))
-        ]);
+        $validated = parent::validated();
+
+        $validated['password'] = bcrypt('password');
+
+        // $validated['password'] = bcrypt(generateRandomString(8));
 
         // TODO: send password information as mail to new student requesting a password update
+
+        return $validated;
     }
 }

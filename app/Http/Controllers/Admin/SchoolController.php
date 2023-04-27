@@ -58,7 +58,7 @@ class SchoolController extends Controller
             $scp_data = array_merge([
                 'school_id' => $school['id'],
                 'password' => bcrypt('12345678'),
-            ], Arr::only($validated['pcp'], ['firstname', 'lastname', 'phone_number', 'email', 'profile_pic']));
+            ], Arr::only($validated['scp'], ['firstname', 'lastname', 'phone_number', 'email', 'profile_pic']));
 
             $school['admins']['scp'] = $this->schoolRepository->createSchoolAdmin($scp_data);
 
