@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\School;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudentParentResource extends JsonResource
@@ -20,6 +21,10 @@ class StudentParentResource extends JsonResource
             'lastname' => $this->lastname,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
+            'profile_pic' => $this->profile_pic,
+            'status' => $this->status,
+            'no_of_wards' => $this->children()->count(),
+            'wards_schools' => $this->children->map(fn ($child) => School::find($child->school_id)->only('id', 'name'))
         ];
     }
 }

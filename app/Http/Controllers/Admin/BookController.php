@@ -9,6 +9,7 @@ use App\Repositories\Interfaces\TestRepositoryInterface;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class BookController extends Controller
@@ -105,6 +106,15 @@ class BookController extends Controller
 
     public function getBookTests($book_id)
     {
+        $validator = Validator::make(
+            ['book_id' => $book_id],
+            ['book_id' => 'required|exists:books,id']
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 404);
+        }
+
         return response([
             'success' => true,
             'data' => $this->testRepository->getTestsForBook($book_id)

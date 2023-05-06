@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminStudentRegisterRequest;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -26,6 +27,15 @@ class StudentController extends Controller
 
     public function getStudentInfo(string $student_id)
     {
+        $validator = Validator::make(
+            ['student_id' => $student_id],
+            ['student_id' => 'required|exists:students,id']
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 404);
+        }
+
         return response([
             'success' => true,
             'data' => $this->studentRepository->getStudentData($student_id)

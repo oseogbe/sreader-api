@@ -21,6 +21,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone_number')->unique()->nullable();
             $table->string('password');
+            $table->string('profile_pic')->nullable();
+            $table->string('status')->default('inactive');
+            $table->dateTime('activated_at')->nullable();
+            $table->dateTime('deactivated_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

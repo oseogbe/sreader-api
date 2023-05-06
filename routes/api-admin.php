@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\CopyController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ParentController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\TicketController;
+use App\Models\StudentParent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +43,13 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
         Route::get('/{student_id}', [StudentController::class, 'getStudentInfo']);
         Route::post('/', [StudentController::class, 'addStudent']);
         // Route::patch('/{student_id}', [StudentController::class, 'updateStudent']);
+    });
+
+    Route::prefix('parents')->group(function () {
+
+        Route::get('/', [ParentController::class, 'allParents']);
+        Route::get('/{parent_id}', [ParentController::class, 'getParentInfo']);
+        Route::post('/', [ParentController::class, 'addParent']);
     });
 
     Route::prefix('books')->group(function () {

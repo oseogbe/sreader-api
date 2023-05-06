@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Repositories\Eloquents\AdminRepository;
 use App\Repositories\Eloquents\BookRepository;
 use App\Repositories\Eloquents\CopyRepository;
+use App\Repositories\Eloquents\ParentRepository;
 use App\Repositories\Eloquents\ProfileRepository;
 use App\Repositories\Eloquents\SchoolAdminRepository;
 use App\Repositories\Eloquents\SchoolRepository;
@@ -15,6 +16,7 @@ use App\Repositories\Eloquents\TicketRepository;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Repositories\Interfaces\BookRepositoryInterface;
 use App\Repositories\Interfaces\CopyRepositoryInterface;
+use App\Repositories\Interfaces\ParentRepositoryInterface;
 use App\Repositories\Interfaces\ProfileRepositoryInterface;
 use App\Repositories\Interfaces\SchoolAdminRepositoryInterface;
 use App\Repositories\Interfaces\SchoolRepositoryInterface;
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CopyRepositoryInterface::class, CopyRepository::class);
         $this->app->bind(TestRepositoryInterface::class, TestRepository::class);
         $this->app->bind(TicketRepositoryInterface::class, TicketRepository::class);
+        $this->app->bind(ParentRepositoryInterface::class, ParentRepository::class);
     }
 
     /**

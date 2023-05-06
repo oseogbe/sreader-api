@@ -40,6 +40,6 @@ class StudentParent extends Authenticatable
 
     public function children()
     {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Student::class, 'parent_id');
     }
 }

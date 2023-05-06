@@ -9,6 +9,7 @@ use App\Repositories\Interfaces\SchoolRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Throwable;
 
 class SchoolController extends Controller
@@ -30,6 +31,15 @@ class SchoolController extends Controller
 
     public function getSchool(string $school_id)
     {
+        $validator = Validator::make(
+            ['school_id' => $school_id],
+            ['school_id' => 'required|exists:schools,id']
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 404);
+        }
+
         return response([
             'success' => true,
             'data' => $this->schoolRepository->getSchoolData($school_id)
