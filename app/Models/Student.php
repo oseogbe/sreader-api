@@ -5,16 +5,18 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Notifications\ResetPasswordNotification;
+use App\Traits\FilterableByDates;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class Student extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes, FilterableByDates;
 
     protected $guard = 'student';
 
@@ -88,11 +90,6 @@ class Student extends Authenticatable
     {
         return $this->hasMany(TestResult::class)->latest();
     }
-
-    // public function studentParents()
-    // {
-    //     return $this->belongsToMany(StudentParent::class, 'parent_student', 'student_id', 'parent_id');
-    // }
 
     public function parent()
     {

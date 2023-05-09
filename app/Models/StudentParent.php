@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByDates;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class StudentParent extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes, FilterableByDates;
 
     protected $guarded = [];
 

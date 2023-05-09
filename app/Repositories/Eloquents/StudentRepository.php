@@ -7,56 +7,57 @@ use App\Http\Resources\StudentResourceCollection;
 use App\Http\Resources\TestResultResource;
 use App\Models\Student;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class StudentRepository implements StudentRepositoryInterface
 {
     function getStudentsData(): array
     {
-        $students = Student::orderBy('firstname');
+        $students = Student::custom()->orderBy('firstname');
 
-        if($filter = request()->filter ?? ['unit' => 'month', 'value' => 6]) {
-            $joined_at = $filter['unit'] == 'week' ? Carbon::now()->subWeeks($filter['value']) : Carbon::now()->subMonths($filter['value']);
-            $students = $students->where('created_at', '>=', $joined_at);
+        $students_no = (clone $students)->count();
+
+        $students_new = (clone $students)->where('created_at', '>=', now()->subWeek());
+        $students_new_no = $students_new->count();
+
+        $students_active = (clone $students)->where('status', 'active');
+        $students_active_no = $students_active->count();
+
+        $students_inactive = (clone $students)->where('status', 'inactive');
+        $students_inactive_no = $students_inactive->count();
+
+        if($filter = request('filter'))
+        {
+            $students_no_growth = growthBetweenTimePeriods((clone $students), ['unit' => $filter['unit'], 'value' => $filter['value']]);
+            $students_new_no_growth = growthBetweenTimePeriods($students_new, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+            $students_active_no_growth = growthBetweenTimePeriods($students_active, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+            $students_inactive_no_growth = growthBetweenTimePeriods($students_inactive, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+
+            return array_merge([
+                'all' => [
+                    'count' => $students_no,
+                    'growth' => $students_no_growth,
+                ],
+                'new' => [
+                    'count' => $students_new_no,
+                    'growth' => $students_new_no_growth,
+                ],
+                'active' => [
+                    'count' => $students_active_no,
+                    'growth' => $students_active_no_growth,
+                ],
+                'inactive' => [
+                    'count' => $students_inactive_no,
+                    'growth' => $students_inactive_no_growth,
+                ]
+            ], (new StudentResourceCollection($students->paginate(10)))->jsonSerialize());
         }
 
-        $students_clone = clone $students;
-        $students_no = $students_clone->count();
-        $students_no_growth = getModelPercentageIncrease($students_clone, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-
-        $students_clone = clone $students;
-        $students_new = $students_clone->where('created_at', '>=', Carbon::now()->subWeek());
-        $students_new_no = $students_new->count();
-        $students_new_no_growth = getModelPercentageIncrease($students_new, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-
-        $students_clone = clone $students;
-        $students_active = $students_clone->where('status', 'active');
-        $students_active_no = $students_active->count();
-        $students_active_no_growth = getModelPercentageIncrease($students_active, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-
-        $students_clone = clone $students;
-        $students_inactive = $students_clone->where('status', 'inactive');
-        $students_inactive_no = $students_inactive->count();
-        $students_inactive_no_growth = getModelPercentageIncrease($students_inactive, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-
         return array_merge([
-            'all' => [
-                'count' => $students_no,
-                'growth' => $students_no_growth,
-            ],
-            'new' => [
-                'count' => $students_new_no,
-                'growth' => $students_new_no_growth,
-            ],
-            'active' => [
-                'count' => $students_active_no,
-                'growth' => $students_active_no_growth,
-            ],
-            'inactive' => [
-                'count' => $students_inactive_no,
-                'growth' => $students_inactive_no_growth,
-            ]
+            'all' => $students_no,
+            'new' => $students_new_no,
+            'active' => $students_active_no,
+            'inactive' =>  $students_inactive_no,
         ], (new StudentResourceCollection($students->paginate(10)))->jsonSerialize());
     }
 
@@ -120,7 +121,7 @@ class StudentRepository implements StudentRepositoryInterface
         $otp_created = DB::table('password_resets')->insert([
             'email' => $student->email,
             'token' =>  $token,
-            'created_at' => Carbon::now()
+            'created_at' => now()
         ]);
 
         return $token;

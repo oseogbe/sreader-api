@@ -38,41 +38,42 @@ function storeFileOnFirebase($remotefolder, $file)
     }
 }
 
-function getModelPercentageIncrease($Model, $period)
+function growthBetweenTimePeriods($Model, $period)
 {
-    $unit = $period['unit'];
-    $value = $period['value'];
+    if($period) {
+        $unit = $period['unit'];
+        $value = $period['value'];
 
-    if($unit == 'week')
-    {
-        $firstStartDate = Carbon::now()->subWeeks(($value * 2) - 1)->startOfWeek();
-        $firstEndDate = Carbon::now()->subWeeks($value)->endOfWeek();
+        if($unit == 'week')
+        {
+            $firstStartDate = Carbon::now()->subWeeks(($value * 2) - 1)->startOfWeek();
+            $firstEndDate = Carbon::now()->subWeeks($value)->endOfWeek();
 
-        $secondStartDate = Carbon::now()->subWeeks($value - 1)->startOfWeek();
-        $secondEndDate = Carbon::now()->endOfWeek();
+            $secondStartDate = Carbon::now()->subWeeks($value - 1)->startOfWeek();
+            $secondEndDate = Carbon::now()->endOfWeek();
+        }
+        else {
+            $firstStartDate = Carbon::now()->subMonths(($value * 2) - 1)->startOfMonth();
+            $firstEndDate = Carbon::now()->subMonths($value)->endOfMonth();
+
+            $secondStartDate = Carbon::now()->subMonths($value - 1)->startOfMonth();
+            $secondEndDate = Carbon::now()->endOfMonth();
+        }
+
+        // $Model = str_replace('&quot;', '', "App\Models\\$Model");
+
+        $startCount = $Model->whereBetween('created_at', [$firstStartDate, $firstEndDate])->count();
+
+        $endCount = $Model->whereBetween('created_at', [$secondStartDate, $secondEndDate])->count();
+
+        if($startCount == 0) return 0;
+
+        // calculate the percentage increase
+        $increase = ($endCount - $startCount) / $startCount * 100;
+
+        return $increase;
     }
-    else {
-        $firstStartDate = Carbon::now()->subMonths(($value * 2) - 1)->startOfMonth();
-        $firstEndDate = Carbon::now()->subMonths($value)->endOfMonth();
-
-        $secondStartDate = Carbon::now()->subMonths($value - 1)->startOfMonth();
-        $secondEndDate = Carbon::now()->endOfMonth();
-    }
-
-    // $Model = str_replace('&quot;', '', "App\Models\\$Model");
-
-    $startCount = $Model->whereBetween('created_at', [$firstStartDate, $firstEndDate])->count();
-
-    $endCount = $Model->whereBetween('created_at', [$secondStartDate, $secondEndDate])->count();
-
-    if($startCount == 0) return 0;
-
-    // calculate the percentage increase
-    $increase = ($endCount - $startCount) / $startCount * 100;
-
-    return $increase;
 }
-
 
 function getFirstAndLastName($name)
 {
