@@ -24,7 +24,7 @@ class TicketFilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'tickets_group_by' => ['required', 'string'],
+            'period' => ['required', 'string'],
         ];
     }
 }

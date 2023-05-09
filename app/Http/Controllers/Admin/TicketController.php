@@ -25,7 +25,7 @@ class TicketController extends Controller
         return response([
             'success' => true,
             'data' => [
-                'ticket_groups' => $this->ticketRepository->getTicketGroups($filter['tickets_group_by']),
+                'ticket_groups' => $this->ticketRepository->getTicketGroups($filter['period']),
                 'tickets' => $this->ticketRepository->getTickets()
             ]
         ]);
