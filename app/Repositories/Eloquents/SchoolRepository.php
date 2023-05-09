@@ -23,11 +23,11 @@ class SchoolRepository implements SchoolRepositoryInterface
         $schools_inactive = (clone $schools)->where('status', 'inactive');
         $schools_inactive_no = $schools_inactive->count();
 
-        if($filter = request('filter'))
+        if($period = request('period'))
         {
-            $schools_no_growth = growthBetweenTimePeriods((clone $schools), ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $schools_active_no_growth = growthBetweenTimePeriods($schools_active, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $schools_inactive_no_growth = growthBetweenTimePeriods($schools_inactive, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+            $schools_no_growth = growthBetweenTimePeriods((clone $schools), $period);
+            $schools_active_no_growth = growthBetweenTimePeriods($schools_active, $period);
+            $schools_inactive_no_growth = growthBetweenTimePeriods($schools_inactive, $period);
 
             return array_merge([
                 'revenue' => [

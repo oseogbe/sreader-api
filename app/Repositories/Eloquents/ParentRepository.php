@@ -24,12 +24,12 @@ class ParentRepository implements ParentRepositoryInterface
         $parents_inactive = (clone $parents)->where('status', 'inactive');
         $parents_inactive_no = $parents_inactive->count();
 
-        if($filter = request('filter'))
+        if($period = request('period'))
         {
-            $parents_no_growth = growthBetweenTimePeriods((clone $parents), ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $parents_new_no_growth = growthBetweenTimePeriods($parents_new, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $parents_active_no_growth = growthBetweenTimePeriods($parents_active, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $parents_inactive_no_growth = growthBetweenTimePeriods($parents_inactive, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+            $parents_no_growth = growthBetweenTimePeriods((clone $parents), $period);
+            $parents_new_no_growth = growthBetweenTimePeriods($parents_new, $period);
+            $parents_active_no_growth = growthBetweenTimePeriods($parents_active, $period);
+            $parents_inactive_no_growth = growthBetweenTimePeriods($parents_inactive, $period);
 
             return array_merge([
                 'all' => [

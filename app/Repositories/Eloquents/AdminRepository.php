@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Eloquents;
 
-use App\Http\Resources\SchoolResource;
-use App\Http\Resources\SchoolResourceCollection;
 use App\Models\Admin;
 use App\Models\School;
 use App\Models\SchoolAdmin;
@@ -30,7 +28,7 @@ class AdminRepository implements AdminRepositoryInterface
     {
         $admin = Admin::findOrFail($admin_id);
 
-        $admin->tokens()->delete();
+        // $admin->tokens()->delete();
 
         if($admin->role == 'superadmin')
         {
@@ -123,9 +121,9 @@ class AdminRepository implements AdminRepositoryInterface
         return 0.00;
     }
 
-    private function getUserGrowth($group_by)
+    private function getUserGrowth($period)
     {
-        $joined_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
+        $joined_at = now()->sub($period);
 
         $studentGrowth = Student::selectRaw('YEAR(created_at) year, MONTH(created_at) month, COUNT(*) count')
                                     ->where('created_at', '>=', $joined_at)
@@ -155,25 +153,21 @@ class AdminRepository implements AdminRepositoryInterface
         ];
     }
 
-    public function getTickets($group_by)
+    public function getTickets($period)
     {
-        $created_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
+        $created_at = now()->sub($period);
 
         $tickets = Ticket::where('created_at', '>=', $created_at);
 
-        $ATClone = clone $tickets;
-        $newTicketsCount = $ATClone->where('status', 'new')->count();
+        $ticketsCount = (clone $tickets)->count();
 
-        $ATClone = clone $tickets;
-        $openTicketsCount = $ATClone->where('status', 'open')->count();
+        $newTicketsCount = (clone $tickets)->where('status', 'new')->count();
 
-        $ATClone = clone $tickets;
-        $pendingTicketsCount = $ATClone->where('status', 'pending')->count();
+        $openTicketsCount = (clone $tickets)->where('status', 'open')->count();
 
-        $ATClone = clone $tickets;
-        $resolvedTicketsCount = $ATClone->where('status', 'resolved')->count();
+        $pendingTicketsCount = (clone $tickets)->where('status', 'pending')->count();
 
-        $ticketsCount = $tickets->count();
+        $resolvedTicketsCount = (clone $tickets)->where('status', 'resolved')->count();
 
         if ($ticketsCount == 0) {
             return [

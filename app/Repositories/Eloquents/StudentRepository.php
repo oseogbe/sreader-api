@@ -26,12 +26,12 @@ class StudentRepository implements StudentRepositoryInterface
         $students_inactive = (clone $students)->where('status', 'inactive');
         $students_inactive_no = $students_inactive->count();
 
-        if($filter = request('filter'))
+        if($period = request('period'))
         {
-            $students_no_growth = growthBetweenTimePeriods((clone $students), ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $students_new_no_growth = growthBetweenTimePeriods($students_new, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $students_active_no_growth = growthBetweenTimePeriods($students_active, ['unit' => $filter['unit'], 'value' => $filter['value']]);
-            $students_inactive_no_growth = growthBetweenTimePeriods($students_inactive, ['unit' => $filter['unit'], 'value' => $filter['value']]);
+            $students_no_growth = growthBetweenTimePeriods((clone $students), $period);
+            $students_new_no_growth = growthBetweenTimePeriods($students_new, $period);
+            $students_active_no_growth = growthBetweenTimePeriods($students_active, $period);
+            $students_inactive_no_growth = growthBetweenTimePeriods($students_inactive, $period);
 
             return array_merge([
                 'all' => [

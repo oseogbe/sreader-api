@@ -14,22 +14,16 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TicketRepository implements TicketRepositoryInterface
 {
-    function getTicketGroups(array $group_by)
+    function getTicketGroups($period)
     {
-        $created_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
+        $created_at = now()->sub($period);
 
         $tickets = Ticket::where('created_at', '>=', $created_at);
 
-        $ATClone = clone $tickets;
-        $openTicketsCount = $ATClone->where('status', 'open')->count();
-
-        $ATClone = clone $tickets;
-        $pendingTicketsCount = $ATClone->where('status', 'pending')->count();
-
-        $ATClone = clone $tickets;
-        $resolvedTicketsCount = $ATClone->where('status', 'resolved')->count();
-
-        $ticketsCount = $tickets->count();
+        $ticketsCount = (clone $tickets)->count();
+        $openTicketsCount = (clone $tickets)->where('status', 'open')->count();
+        $pendingTicketsCount = (clone $tickets)->where('status', 'pending')->count();
+        $resolvedTicketsCount = (clone $tickets)->where('status', 'resolved')->count();
 
         return [
             'all' => $ticketsCount,
@@ -44,9 +38,9 @@ class TicketRepository implements TicketRepositoryInterface
         return new TicketResourceCollection(Ticket::latest()->get());
     }
 
-    function getTicketGroupsForSchool(array $group_by)
+    function getTicketGroupsForSchool($period)
     {
-        $created_at = $group_by['unit'] == 'week' ? Carbon::now()->subWeeks($group_by['value']) : Carbon::now()->subMonths($group_by['value']);
+        $created_at = now()->sub($period);
 
         $school = auth()->user()->school;
 
@@ -64,16 +58,10 @@ class TicketRepository implements TicketRepositoryInterface
                             }
                         );
 
-        $ATClone = clone $tickets;
-        $openTicketsCount = $ATClone->where('status', 'open')->count();
-
-        $ATClone = clone $tickets;
-        $pendingTicketsCount = $ATClone->where('status', 'pending')->count();
-
-        $ATClone = clone $tickets;
-        $resolvedTicketsCount = $ATClone->where('status', 'resolved')->count();
-
-        $ticketsCount = $tickets->count();
+        $ticketsCount = (clone $tickets)->count();
+        $openTicketsCount = (clone $tickets)->where('status', 'open')->count();
+        $pendingTicketsCount = (clone $tickets)->where('status', 'pending')->count();
+        $resolvedTicketsCount = (clone $tickets)->where('status', 'resolved')->count();
 
         return [
             'all' => $ticketsCount,

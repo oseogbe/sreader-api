@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Activation;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 
 class SingleActivation extends Controller
 {
-    public function __invoke(Request $request, User $student)
+    public function __invoke(Request $request, $user)
     {
         // select class
 
@@ -20,7 +19,7 @@ class SingleActivation extends Controller
 
 
         // activate student?
-        $student->update(['status' => 'active', 'activated_at' => now()]);
+        $user->update(['status' => 'active', 'activated_at' => now()]);
 
         // return response
         return response([

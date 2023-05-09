@@ -4,9 +4,7 @@ namespace App\Repositories\Eloquents;
 
 use App\Models\Teacher;
 use App\Repositories\Interfaces\SchoolAdminRepositoryInterface;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SchoolAdminRepository implements SchoolAdminRepositoryInterface
 {
