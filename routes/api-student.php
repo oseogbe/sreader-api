@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:student'], function () {
 
     Route::post('/class', [ProfileController::class, 'selectClass']);
 
+    Route::post('/{student_id}/save-app-usage-hours', [ProfileController::class, 'saveAppUsageTime']);
+
     Route::prefix('books')->group(function () {
         Route::get('/', [BookController::class, 'getBooksByStudentClass']);
         Route::get('/{id}/tests', [BookController::class, 'getBookTests']);
