@@ -25,7 +25,7 @@ class StudentResource extends JsonResource
             'status' => $this->status,
             'school' => SchoolResource::make($this->school),
             'level' => LevelResource::make($this->level),
-            'parent' => StudentParentResource::make($this->parent)
+            'parent' => StudentParentResource::make($this->parent),
         ];
     }
 }
