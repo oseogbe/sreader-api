@@ -33,7 +33,7 @@ class ParentController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 404);
+            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         return response([
@@ -52,5 +52,10 @@ class ParentController extends Controller
             'success' => true,
             'message' => 'New parent added!',
         ], 201);
+    }
+
+    public function updateParent(string $parent_id)
+    {
+        # code...
     }
 }

@@ -22,8 +22,12 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('email');
             $table->string('phone_number')->nullable();
+            $table->string('profile_pic')->nullable();
+            $table->string('status')->default('inactive');
             $table->string('password');
             $table->rememberToken();
+            $table->dateTime('activated_at')->nullable();
+            $table->dateTime('deactivated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

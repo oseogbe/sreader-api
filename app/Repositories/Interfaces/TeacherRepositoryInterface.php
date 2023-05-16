@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 interface TeacherRepositoryInterface
 {
+    public function getTeachersData(): array;
     public function createTeacher(array $teacher_data): array;
     public function getTeacherByID(string $teacher_id): array;
     public function getTeacherByEmail(string $email): array;

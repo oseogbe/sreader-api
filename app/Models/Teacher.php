@@ -49,6 +49,13 @@ class Teacher extends Authenticatable
 
     public function subjects()
     {
-        return $this->hasMany(TeacherSubject::class)->with('level', 'subject');
+        return $this->hasManyThrough(
+            Subject::class,
+            TeacherSubject::class,
+            'teacher_id',
+            'id',
+            'id',
+            'subject_id'
+        );
     }
 }
