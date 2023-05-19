@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminEditParentRequest;
 use App\Http\Requests\AdminParentRegisterRequest;
 use App\Repositories\Interfaces\ParentRepositoryInterface;
 use Illuminate\Http\Request;
@@ -54,8 +55,15 @@ class ParentController extends Controller
         ], 201);
     }
 
-    public function updateParent(string $parent_id)
+    public function updateParent(AdminEditParentRequest $request, string $parent_id)
     {
-        # code...
+        $validated = $request->customValidated();
+
+        $parent = $this->parentRepository->updateParent($parent_id, $validated);
+
+        return response([
+            'success' => true,
+            'message' => 'Parent details updated!',
+        ]);
     }
 }

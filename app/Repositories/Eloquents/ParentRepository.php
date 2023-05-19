@@ -66,6 +66,15 @@ class ParentRepository implements ParentRepositoryInterface
 
     function createParent(array $parent_data): array
     {
-        return [];
+        $parent = StudentParent::create($parent_data);
+
+        return $parent->toArray();
+    }
+
+    function updateParent(string $parent_id, array $data): bool
+    {
+        $parent = StudentParent::findOrFail($parent_id);
+
+        return $parent->update($data);
     }
 }

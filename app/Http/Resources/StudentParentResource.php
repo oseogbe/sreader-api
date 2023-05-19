@@ -15,7 +15,7 @@ class StudentParentResource extends JsonResource
      */
     public function toArray($request)
     {
-        $period = $request->period;
+        $period = $request->period ?? "6 months";
 
         return [
             'id' => $this->id,
