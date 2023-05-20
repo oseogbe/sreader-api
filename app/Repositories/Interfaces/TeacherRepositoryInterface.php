@@ -6,6 +6,7 @@ interface TeacherRepositoryInterface
 {
     public function getTeachersData(): array;
     public function createTeacher(array $teacher_data): array;
+    public function updateTeacher(string $teacher_id, array $data): bool;
     public function getTeacherByID(string $teacher_id): array;
     public function getTeacherByEmail(string $email): array;
     public function createTeacherAuthToken(string $teacher_id): array;

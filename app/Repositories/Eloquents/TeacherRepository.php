@@ -73,6 +73,13 @@ class TeacherRepository implements TeacherRepositoryInterface {
         return Teacher::where('email', $email)->firstOrFail()->toArray();
     }
 
+    function updateTeacher(string $teacher_id, array $data): bool
+    {
+        $teacher = Teacher::findOrFail($teacher_id);
+
+        return $teacher->update($data);
+    }
+
     function createTeacherAuthToken(string $teacher_id): array
     {
         $teacher = Teacher::findOrFail($teacher_id);

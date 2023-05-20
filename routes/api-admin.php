@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:super-admin,app-admin']]
     Route::prefix('teachers')->group(function () {
 
         Route::get('/', [TeacherController::class, 'allTeachers']);
+        Route::post('/', [TeacherController::class, 'addTeacher']);
+        Route::patch('/{teacher_id}', [TeacherController::class, 'updateTeacher']);
     });
 
     Route::prefix('books')->group(function () {
